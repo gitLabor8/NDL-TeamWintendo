@@ -1,10 +1,7 @@
 import picamera
+from PIL import Image, ImageFilter
 
-camera = picamera.PiCamera()
-
-image = camera.capture()
-
-original_image = image
+image = Image.open('test.jpg')
 
 whitePixelAmount = 0
 
@@ -16,10 +13,3 @@ for x in range(0, image.width):
         if white > black:
             whitePixelAmount += 1
             image[x, y] = 0, 0, 255
-
-f= open("image.jpg","w+")
-f.write(image)
-f.close()
-o= open("original_image.jpg","w+")
-o.write(original_image)
-o.close()
