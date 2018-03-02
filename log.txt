@@ -29,6 +29,12 @@ Gestart met Arduino om te functioneren als left joy con
 Nin: Respons: We don't have protocols for this yet and won't in the near future. Do you want Switch or LABO dev kit ?
 
 vr 2 mar:
+Git strak geordend, bufferfolders
+Besloten geen bluetooth voor filesharing tussen console en right JC
+Filesharing opgezet, nog niet werkend
+left JC parseert input correct. Gaat via BT doorgeven. BT nog niet geimplementeerd
 Nin: Sent: We willen Switch, want LABO heeft te veel API's, terwijl we die juist moeten schrijven voor het vak 
 
-
+ma 5 mar:
+BT en shared folder doen
+Karton
