@@ -1,0 +1,34 @@
+# Intern document dat als basis kan dienen voor ons verslag
+ma 5 feb: Eerste meeting
+Hoorcollege + Arduino opdracht
+Nin: Eerste mail naar Nintendo om een dev kit aan te vragen
+
+vr 9 feb: Arduino
+Arduino opdracht afgewerkt
+Nin: Respons: ze vragen naar concepten
+
+ma 12 feb: Carnaval
+\
+
+vr 16 feb: Proposals
+Presentatie voorstellen. Daarna overlegd met docenten.
+Trompet + Guitar concept verzonnen
+
+ma 19 feb:
+Plant & Cooking concept verzonnen
+Begonnen met Guitar uitwerken
+Rpi geflasht om als right joy con te functioneren
+Nin: Sent: Technische tekeningen Guitar, Plant en Cooking concepts to Nintendo
+
+vr 23 feb:
+Rpi connectie via ssh/vnc
+
+ma 26 feb:
+Rpi maakt continuous foto's (voor witte stip detectie)
+Gestart met Arduino om te functioneren als left joy con
+Nin: Respons: We don't have protocols for this yet and won't in the near future. Do you want Switch or LABO dev kit ?
+
+vr 2 mar:
+Nin: Sent: We willen Switch, want LABO heeft te veel API's, terwijl we die juist moeten schrijven voor het vak 
+
+
