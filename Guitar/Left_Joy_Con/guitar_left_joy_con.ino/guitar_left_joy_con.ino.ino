@@ -22,7 +22,8 @@ int oldY = 0;
 
 void setup() {
   // Show that setup() is run, even though the execercise doesn't explicitly specify this
-  Serial.begin(9600);
+  // No Serial.begin so we can broadcast over BT
+  //Serial.begin(9600);
   //Serial.println("Program started!");
 
   pinMode(xPin, INPUT);
@@ -51,10 +52,13 @@ void tapDetection(){
   Serial.println(yPosition);
   Serial.println(oldX - xPosition);
   */
-  if ((abs (oldX - xPosition) > 50) || (abs (oldY - yPosition)) > 50)
-    Serial.println("1");
-  oldX = xPosition;
-  oldY = yPosition;
+  if ((abs (oldX - xPosition) > 30) || (abs (oldY - yPosition)) > 30)
+    // Avoiding back-clicks
+    if ( abs (oldX - 725) < 30  && abs( oldY - 785) < 30){
+     Serial.println("1");
+    }
+   oldX = xPosition;
+   oldY = yPosition;
 }
 
 void testPulse() {
@@ -72,10 +76,10 @@ void loop() {
   //printJoystickState();
 
   // For checking bluetooth
-  //testPulse();
+  testPulse();
   // http://techwatch.keeward.com/geeks-and-nerds/how-to-configure-and-use-an-iteaduino-bt/
 
-  tapDetection();
-  delay(100);
+  //tapDetection();
+  delay(10);
 }
 
