@@ -33,8 +33,10 @@ Git strak geordend, bufferfolders
 Besloten geen bluetooth voor filesharing tussen console en right JC
 Filesharing opgezet, nog niet werkend
 left JC parseert input correct. Gaat via BT doorgeven. BT nog niet geimplementeerd
-Nin: Sent: We willen Switch, want LABO heeft te veel API's, terwijl we die juist moeten schrijven voor het vak 
+Nin: Sent: We willen Switch, want LABO heeft te veel API's, terwijl we die juist moeten schrijven voor het vak
+Karton
 
 ma 5 mar:
 BT en shared folder doen
-Karton
+Acc eerste proef test
+Geluid script gemaakt
