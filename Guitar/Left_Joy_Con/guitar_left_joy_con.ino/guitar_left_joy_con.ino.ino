@@ -6,30 +6,37 @@
  */
 
 #define DELAY 1000
-boolean ledOn = false;
+
+// Builtin LED
+boolean pulseLedOn = false;
 long lastTime = 0;
 
+// Joystick up and down
 int xPin = A1;
 int yPin = A2;
-int buttonPin = A3;
+// Joystick press
+int zPin = A3;
 
+// Joystick init positions
 int xPosition = 0;
 int yPosition = 0;
-int buttonState = 0;
+// zPosition = Button press
+int zPosition = 0;
 
 int oldX = 0;
 int oldY = 0;
 
 void setup() {
   // Show that setup() is run, even though the execercise doesn't explicitly specify this
-  //Serial.begin(9600);
+  // No Serial.begin so we can broadcast over BT
+//  Serial.begin(9600);
   //Serial.println("Program started!");
 
   pinMode(xPin, INPUT);
   pinMode(yPin, INPUT);
-  //activate pull-up resistor on the push-button pin
-  pinMode(buttonPin, INPUT_PULLUP); 
-  
+  pinMode(zPin, INPUT);
+  // Init hello-world pin
+  pinMode(LED_BUILTIN, OUTPUT); 
 }
 
 void printJoystickState() {
@@ -37,14 +44,13 @@ void printJoystickState() {
   Serial.print(xPosition);
   Serial.print(" | Y: ");
   Serial.print(yPosition);
-  Serial.print(" | Button: ");
-  Serial.println(buttonState);
+  Serial.print(" | Z: ");
+  Serial.println(zPosition);
   delay(DELAY);
 }
 
 void tapDetection(){
-
-  // Debug:
+  // Debug functionality:
   // Serial.println(oldX - xPosition);
   if ((abs (oldX - xPosition) > 50) || (abs (oldY - yPosition)) > 50)
     Serial.println("1");
@@ -54,16 +60,19 @@ void tapDetection(){
 
 void testPulse() {
   Serial.println("1");
+  builtinLedBlink();
   delay(DELAY);
-  
 }
 
+void builtinLedBlink(){
+    pulseLedOn = not pulseLedOn;
+    digitalWrite(LED_BUILTIN, pulseLedOn);
+}
 
 void loop() {
   xPosition = analogRead(xPin);
   yPosition = analogRead(yPin);
-  buttonState = digitalRead(buttonPin);
-  
+  zPosition = digitalRead(zPin);
 
   // For checking bluetooth
   testPulse();
