@@ -21,12 +21,12 @@ Rpi geflasht om als right joy con te functioneren
 Nin: Sent: Technische tekeningen Guitar, Plant en Cooking concepts to Nintendo
 
 vr 23 feb:
-Rpi connectie via ssh/vnc
+Rpi connectie via ssh/vnc (and reinstalled)
 
 ma 26 feb:
 Rpi maakt continuous foto's (voor witte stip detectie)
 Gestart met Arduino om te functioneren als left joy con
-Nin: Respons: We don't have protocols for this yet and won't in the near future. Do you want Switch or LABO dev kit ?
+Nin: Respons: We don't have protocols for this yet and won't in the near future. Do you want Switch or LABO dev kit?
 
 vr 2 mar:
 Git strak geordend, bufferfolders
@@ -38,3 +38,9 @@ Nin: Sent: We willen Switch, want LABO heeft te veel API's, terwijl we die juist
 ma 5 mar:
 BT en shared folder doen
 Karton
+
+vr 9 mar:
+Router problems
+Presentation built
+Added test blink Arduino
+Nin: They gave up on us.
