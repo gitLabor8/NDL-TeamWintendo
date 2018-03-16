@@ -44,3 +44,27 @@ Router problems
 Presentation built
 Added test blink Arduino
 Nin: They gave up on us.
+
+ma 12 mar:
+Mid-term presentations
+Revising plan: no cooking/plant
+More software, web app, Flask, something educational
+
+vr 16 mar:
+Cried. Setup Flask environment, then deleted it over HTML5
+Skipped Arduino bluetooth connection. Now we succesfully use USB-serial cable.
+Python script made for reading serial input
+HTML5 shady framework for reading serial input
+
+Requirements:
+- Guitar, four snares, one mash button
+ + Arduino: meuk
+ + Pi: meuk
+ + Interactie: meuk
+- Webapp on Pi, reachable through VNC
+ + Using HTML5
+ + Show given input
+ + Hardcode some 'songs'
+ + Replay songs with guitar -> score
+
+- We quit the other two concepts
