@@ -29,7 +29,7 @@ int oldY = 0;
 void setup() {
   // Show that setup() is run, even though the execercise doesn't explicitly specify this
   // No Serial.begin so we can broadcast over BT
-//  Serial.begin(9600);
+  Serial.begin(9600);
   //Serial.println("Program started!");
 
   pinMode(xPin, INPUT);
@@ -75,10 +75,10 @@ void loop() {
   zPosition = digitalRead(zPin);
 
   // For checking bluetooth
-  testPulse();
+  //testPulse();
   // http://techwatch.keeward.com/geeks-and-nerds/how-to-configure-and-use-an-iteaduino-bt/
 
-  //tapDetection();
+  tapDetection();
   //printJoystickState();
   delay(100);
 }
