@@ -11,6 +11,10 @@
 boolean pulseLedOn = false;
 long lastTime = 0;
 
+// State of tap detection
+enum state {neutral, triggered};
+state tap = neutral;
+
 // Joystick up and down
 int xPin = A1;
 int yPin = A2;
@@ -23,15 +27,9 @@ int yPosition = 0;
 // zPosition = Button press
 int zPosition = 0;
 
-int oldX = 0;
-int oldY = 0;
-
 void setup() {
   // Show that setup() is run, even though the execercise doesn't explicitly specify this
-  // No Serial.begin so we can broadcast over BT
   Serial.begin(9600);
-  //Serial.println("Program started!");
-
   pinMode(xPin, INPUT);
   pinMode(yPin, INPUT);
   pinMode(zPin, INPUT);
@@ -41,45 +39,53 @@ void setup() {
 
 void printJoystickState() {
   Serial.print("X: ");
-  Serial.print(xPosition);
+  Serial.print(analogRead(xPin));
   Serial.print(" | Y: ");
-  Serial.print(yPosition);
+  Serial.print(analogRead(yPin));
   Serial.print(" | Z: ");
   Serial.println(zPosition);
   delay(DELAY);
 }
 
 void tapDetection(){
-  // Debug functionality:
-  // Serial.println(oldX - xPosition);
-  if ((abs (oldX - xPosition) > 50) || (abs (oldY - yPosition)) > 50)
-    Serial.println("1");
-  oldX = xPosition;
-  oldY = yPosition;
+  // Tap has been triggered and returned to initial positions afterwards
+  if (tap == 1 &&
+       (xPosition >= 490 && xPosition <= 510) &&
+       (yPosition >= 535 && yPosition <= 545)){
+       tap = 0;
+       }
+
+  // Tap was in neutral position before and is now triggered
+  else if (tap == 0 && 
+      ((xPosition <= 450 || xPosition >= 550) ||
+      (yPosition <= 490 || yPosition >= 590))){
+      Serial.println("1");
+      tap = 1;
+      }
 }
 
-void testPulse() {
+void test_Pulse() {
   Serial.println("1");
-  builtinLedBlink();
+  test_builtinLedBlink();
   delay(DELAY);
 }
 
-void builtinLedBlink(){
+void test_builtinLedBlink(){
     pulseLedOn = not pulseLedOn;
     digitalWrite(LED_BUILTIN, pulseLedOn);
 }
 
 void loop() {
+  // printJoystickState();
   xPosition = analogRead(xPin);
   yPosition = analogRead(yPin);
   zPosition = digitalRead(zPin);
 
   // For checking bluetooth
-  //testPulse();
+  // testPulse();
   // http://techwatch.keeward.com/geeks-and-nerds/how-to-configure-and-use-an-iteaduino-bt/
 
   tapDetection();
-  //printJoystickState();
-  delay(100);
+  delay(50);
 }
 
