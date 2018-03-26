@@ -68,3 +68,13 @@ Requirements:
  + Replay songs with guitar -> score
 
 - We quit the other two concepts
+
+ma 19 mar:
+Skipped due to illness, construction at home and other reasons
+
+vr 23 mar:
+Started HTML5 framework: responsive buttons reacting on local keyboard presses
+Multiple attempts to create a NAT on the Rpi (to connect with the locally hosted web app). Attempt through using Rpi as hotspot
+
+TODO: 
+Investigate possibility bitmap-JavaScript
