@@ -1,22 +1,66 @@
 import picamera
 from PIL import Image
 
-im = Image.open('test.jpg')
+im = Image.open('testimage2.jpg')
 pixelMap = im.load()
 
-whitePixelAmount = 0
+whitePixelbutton1 = 0
+whitePixelbutton2 = 0
+whitePixelbutton3 = 0
+whitePixelbutton4 = 0
 
 img = Image.new( im.mode, im.size)
 pixelsNew = img.load()
-for x in range(img.size[0]):
-    for y in range(img.size[1]):
+for x in range(75, 125):
+    for y in range(375, 425):
         r, g, b = pixelMap[x,y]
-        if r > 210 and g > 210 and b > 210:
-            whitePixelAmount += 1
-            pixelMap[x,y] = (0, 0, 0)
-        else:
-            pixelsNew[x,y] = pixelMap[x,y]
-print(whitePixelAmount)
+        if r > 180 and g > 180 and b > 180:
+            whitePixelbutton1 += 1
+    
+for x in range(425, 475):
+    for y in range(550, 600):
+        r, g, b = pixelMap[x,y]
+        if r > 180 and g > 180 and b > 180:
+            whitePixelbutton2 += 1
+            
+for x in range(725, 775):
+    for y in range(625, 675):
+        r, g, b = pixelMap[x,y]
+        if r > 180 and g > 180 and b > 180:
+            whitePixelbutton3 += 1
+
+for x in range(1175, 1225):
+    for y in range(355, 405):
+        r, g, b = pixelMap[x,y]
+        if r > 180 and g > 180 and b > 180:
+            whitePixelbutton4 += 1
+
+if(whitePixelbutton1 > 600):
+    whitePixelbutton1 = 1
+else:
+    whitePixelbutton1 = 0
+    
+if(whitePixelbutton2 > 600):
+    whitePixelbutton2 = 1
+else:
+    whitePixelbutton2 = 0
+    
+if(whitePixelbutton3 > 600):
+    whitePixelbutton3 = 1
+else:
+    whitePixelbutton3 = 0
+    
+if(whitePixelbutton4 > 600):
+    whitePixelbutton4 = 1
+else:
+    whitePixelbutton4 = 0
+
+
+print(whitePixelbutton1)
+print(whitePixelbutton2)
+print(whitePixelbutton3)
+print(whitePixelbutton4)
+
 im.close()
 img.save("output.jpg")
 img.close()
