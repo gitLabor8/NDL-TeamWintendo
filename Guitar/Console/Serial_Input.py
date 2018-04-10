@@ -11,6 +11,9 @@ camera.resolution = (1280, 720)
 #Opens the serial port where the Arduino is hooked up to, so it can be read.
 ser = serial.Serial("/dev/ttyUSB0", 9600)
 
+#This iterator is to prevent a file from being read from and written to at the same time.
+fileIterator = 0
+
 #Continues while loop to check if we get input form the Arduino and if a picture must then be taken.
 while True:
         #Checks if the arduino sends the signal to take a picture.
@@ -61,33 +64,34 @@ while True:
                         whitePixelbutton1 += 1
                 y = y + 4
 
-            #For every button converts the amount of "white" pixels to a 1 for enough white or a 0 for not enough white.
+            #For every button converts the amount of "white" pixels to wheter it is a stroke or not.
             if(whitePixelbutton1 > 60):
-                whitePixelbutton1 = 0
+                redButton = ''
             else:
-                whitePixelbutton1 = 1
+                redButton = 'r '
                 
             if(whitePixelbutton2 > 60):
-                whitePixelbutton2 = 0
+                yellowButton = ''
             else:
-                whitePixelbutton2 = 1
+                yellowButton = 'y '
                 
             if(whitePixelbutton3 > 60):
-                whitePixelbutton3 = 0
+                greenButton = ''
             else:
-                whitePixelbutton3 = 1
+                greenButton = 'g '
                 
             if(whitePixelbutton4 > 60):
-                whitePixelbutton4 = 0
+                blueButton = ''
             else:
-                whitePixelbutton4 = 1
-
-            #Prints the bits for every button in json.
-            print(json.dumps(whitePixelbutton1))
-            print(json.dumps(whitePixelbutton2))
-            print(json.dumps(whitePixelbutton3))
-            print(json.dumps(whitePixelbutton4))
-
+                blueButton = 'b '
+                       
+            #Prints the bits for every button in a json file.
+            with open('JSONData{0}.json'.format(fileIterator), 'w') as file:
+                json.dump(redButton + yellowButton + greenButton + blueButton, file)
+            
+            #Increaces the fileIterator so next time the value gets written to a drifrent file with 3 difrent files.
+            fileIterator = (fileIterator + 1)%3
+            
             #Closes the image.
             im.close()
             print(time.clock() - tic)
