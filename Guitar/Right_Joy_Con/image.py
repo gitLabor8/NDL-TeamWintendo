@@ -10,7 +10,6 @@ whitePixelbutton3 = 0
 whitePixelbutton4 = 0
 
 img = Image.new( im.mode, im.size)
-pixelsNew = img.load()
 for x in range(75, 125):
     for y in range(375, 425):
         r, g, b = pixelMap[x,y]
@@ -40,24 +39,24 @@ for x in range(1175, 1225):
     y = y + 9
 
 if(whitePixelbutton1 > 60):
-    whitePixelbutton1 = 1
-else:
     whitePixelbutton1 = 0
+else:
+    whitePixelbutton1 = 1
     
 if(whitePixelbutton2 > 60):
-    whitePixelbutton2 = 1
-else:
     whitePixelbutton2 = 0
+else:
+    whitePixelbutton2 = 1
     
 if(whitePixelbutton3 > 60):
-    whitePixelbutton3 = 1
-else:
     whitePixelbutton3 = 0
+else:
+    whitePixelbutton3 = 1
     
 if(whitePixelbutton4 > 60):
-    whitePixelbutton4 = 1
-else:
     whitePixelbutton4 = 0
+else:
+    whitePixelbutton4 = 1
 
 
 print(whitePixelbutton1)
@@ -66,5 +65,3 @@ print(whitePixelbutton3)
 print(whitePixelbutton4)
 
 im.close()
-img.save("output.jpg")
-img.close()
