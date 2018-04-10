@@ -16,41 +16,45 @@ for x in range(75, 125):
         r, g, b = pixelMap[x,y]
         if r > 180 and g > 180 and b > 180:
             whitePixelbutton1 += 1
+    y = y + 9
     
 for x in range(425, 475):
     for y in range(550, 600):
         r, g, b = pixelMap[x,y]
         if r > 180 and g > 180 and b > 180:
             whitePixelbutton2 += 1
+    y = y + 9
             
 for x in range(725, 775):
     for y in range(625, 675):
         r, g, b = pixelMap[x,y]
         if r > 180 and g > 180 and b > 180:
             whitePixelbutton3 += 1
+    y = y + 9
 
 for x in range(1175, 1225):
     for y in range(355, 405):
         r, g, b = pixelMap[x,y]
         if r > 180 and g > 180 and b > 180:
             whitePixelbutton4 += 1
+    y = y + 9
 
-if(whitePixelbutton1 > 600):
+if(whitePixelbutton1 > 60):
     whitePixelbutton1 = 1
 else:
     whitePixelbutton1 = 0
     
-if(whitePixelbutton2 > 600):
+if(whitePixelbutton2 > 60):
     whitePixelbutton2 = 1
 else:
     whitePixelbutton2 = 0
     
-if(whitePixelbutton3 > 600):
+if(whitePixelbutton3 > 60):
     whitePixelbutton3 = 1
 else:
     whitePixelbutton3 = 0
     
-if(whitePixelbutton4 > 600):
+if(whitePixelbutton4 > 60):
     whitePixelbutton4 = 1
 else:
     whitePixelbutton4 = 0
