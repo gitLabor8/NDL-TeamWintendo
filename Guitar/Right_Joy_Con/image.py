@@ -2,29 +2,33 @@ import picamera
 from PIL import Image
 import simplejson as json
 
+#Opens the picture that was taken and makes a pixelmap of it.
 im = Image.open('testimage2.jpg')
 pixelMap = im.load()
 
+#Creates the counters for the amount of white pixels on the place of the button on the picture.
 whitePixelbutton1 = 0
 whitePixelbutton2 = 0
 whitePixelbutton3 = 0
 whitePixelbutton4 = 0
 
-img = Image.new( im.mode, im.size)
+#Checks if every tenth pixel on the location of the first button is white enough.
 for x in range(75, 125):
     for y in range(375, 425):
         r, g, b = pixelMap[x,y]
         if r > 180 and g > 180 and b > 180:
             whitePixelbutton1 += 1
     y = y + 9
-    
+
+#Checks if every tenth pixel on the location of the second button is white enough.   
 for x in range(425, 475):
     for y in range(550, 600):
         r, g, b = pixelMap[x,y]
         if r > 180 and g > 180 and b > 180:
             whitePixelbutton2 += 1
     y = y + 9
-            
+
+#Checks if every tenth pixel on the location of the third button is white enough.
 for x in range(725, 775):
     for y in range(625, 675):
         r, g, b = pixelMap[x,y]
@@ -32,6 +36,7 @@ for x in range(725, 775):
             whitePixelbutton3 += 1
     y = y + 9
 
+#Checks if every tenth pixel on the location of the last button is white enough.
 for x in range(1175, 1225):
     for y in range(355, 405):
         r, g, b = pixelMap[x,y]
@@ -39,6 +44,7 @@ for x in range(1175, 1225):
             whitePixelbutton4 += 1
     y = y + 9
 
+#For every button converts the amount of "white" pixels to a 1 for enough white or a 0 for not enough white.
 if(whitePixelbutton1 > 60):
     whitePixelbutton1 = 0
 else:
@@ -59,10 +65,11 @@ if(whitePixelbutton4 > 60):
 else:
     whitePixelbutton4 = 1
 
-
+#Prints the bits for every button in json.
 print(json.dumps(whitePixelbutton1))
 print(json.dumps(whitePixelbutton2))
 print(json.dumps(whitePixelbutton3))
 print(json.dumps(whitePixelbutton4))
 
+#Closes the image.
 im.close()
