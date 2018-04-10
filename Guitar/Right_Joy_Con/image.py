@@ -1,5 +1,6 @@
 import picamera
 from PIL import Image
+import simplejson as json
 
 im = Image.open('testimage2.jpg')
 pixelMap = im.load()
@@ -59,9 +60,9 @@ else:
     whitePixelbutton4 = 1
 
 
-print(whitePixelbutton1)
-print(whitePixelbutton2)
-print(whitePixelbutton3)
-print(whitePixelbutton4)
+print(json.dumps(whitePixelbutton1))
+print(json.dumps(whitePixelbutton2))
+print(json.dumps(whitePixelbutton3))
+print(json.dumps(whitePixelbutton4))
 
 im.close()
