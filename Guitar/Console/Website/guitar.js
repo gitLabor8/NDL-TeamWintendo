@@ -1,28 +1,66 @@
+/////////
 // Model
+/////////
 
-function Stroke (keyName) {
-  this.button = keyToButton(keyName);
+// Time normalisation
+var startingTime = timeInit();
+
+function timeInit (){
   var d = new Date();
-  this.time = d.getTime();
+  return d.getTime();
 }
 
-/* Backtracking of keys will be added later. Maybe.
+function resetTime (){
+  startingTime = timeInit();
+}
+
+function timeSinceStart (){
+  var d = new Date();
+  time = d.getTime();
+  return (time - startingTime)
+}
+
+// Our first datatype: a button-time pair
+function Stroke(buttonName) {
+  this.button = buttonName;
+  this.time = timeSinceStart();
+}
+
+// Overriding toString didn't work :(
+function printStroke(stroke) {
+  var abbrev = "Undef toString Stroke";
+  switch (stroke.button) {
+    case "redButton": abbrev = "r"; break;
+    case "yellowButton": abbrev = "y"; break;
+    case "greenButton": abbrev = "g"; break;
+    case "blueButton": abbrev = "b"; break;
+    default : break;
+  }
+  return abbrev + ", " + stroke.time;
+}
+
 // Sorted list of all user key strokes
-var allKeyStrokes = [];
-// Keep the newest keystrokes in a different array. We will append it to "allKeyStrokes" when updating the view
+var strokeHistory = [];
 var nextFreeIndex = 0;
-var newKeyStrokes = [];
 function addStroke (stroke) {
-  newKeyStrokes[nextFreeIndex] = stroke;
+  strokeHistory[nextFreeIndex] = stroke;
   nextFreeIndex++;
 }
-*/
+
+// Contains all strokes of the song
+const songStrokes = [];
+
+/////////
 // Controller
+/////////
 
 document.addEventListener('keydown', (event) => {
   const keyName = event.key;
   const buttonName = keyToButton(keyName);
-  document.getElementById(buttonName).style.visibility = 'visible';
+  if (buttonName != null){
+    document.getElementById(buttonName).style.visibility = 'visible';
+    addStroke(new Stroke(buttonName));
+  }
 //  Add when History is added
 //  var currentStroke = new Stroke(keyName);
 //  addStroke(currentStroke);
@@ -31,10 +69,13 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('keyup', (event) => {
   const keyName = event.key;
   const buttonName = keyToButton(keyName);
-  document.getElementById(buttonName).style.visibility = 'hidden';
+  if (buttonName != null){
+    document.getElementById(buttonName).style.visibility = 'hidden';
+  }
 }, false);
 
 // Key to button mapping
+// I want to make a Maybe of this
 function keyToButton (keyName) {
   var button = null;
   switch (keyName) {
@@ -47,12 +88,24 @@ function keyToButton (keyName) {
   return button;
 }
 
+/////////
 // View
+/////////
 
+// Readable string dataformat for Stroke history
+function printStrokeHistory () {
+  var outputString = "";
+  for (var i = 0; i < strokeHistory.length; i++) {
+    outputString += strokeHistory[i].toString();
+    outputString += "/n";
+  }
+  document.getElementById('modalContent').innerHTML = outputString;
+}
 
 /*
-// Update every 500ms=0.5s
-var updateTime = 500;
+// heighten as much as hardware allows
+var fps = 10;
+var updateTime = (1/fps)*1000;
 setInterval(newKeyStrokes.forEach(showButtons), updateTime);
 
 function showButtons (item, index) {
