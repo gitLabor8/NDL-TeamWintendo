@@ -3,7 +3,7 @@ from PIL import Image
 import simplejson as json
 
 #Opens the picture that was taken and makes a pixelmap of it.
-im = Image.open('testimage2.jpg')
+im = Image.open('testimage9.jpg')
 pixelMap = im.load()
 
 #Creates the counters for the amount of white pixels on the place of the button on the picture.
