@@ -1,105 +1,168 @@
-/////////
+// //////////
 // Model
-/////////
+// //////////
 
 // Time normalisation
 var startingTime = timeInit();
 
-function timeInit (){
+function timeInit () {
   var d = new Date();
   return d.getTime();
 }
 
-function resetTime (){
+function resetTime () {
   startingTime = timeInit();
 }
 
-function timeSinceStart (){
+function timeSinceStart () {
   var d = new Date();
-  time = d.getTime();
-  return (time - startingTime)
+  var time = d.getTime();
+  return (time - startingTime);
 }
 
 // Our first datatype: a button-time pair
-function Stroke(buttonName) {
+function Stroke (buttonName) {
   this.button = buttonName;
   this.time = timeSinceStart();
 }
 
-// Overriding toString didn't work :(
-function printStroke(stroke) {
-  var abbrev = "Undef toString Stroke";
-  switch (stroke.button) {
-    case "redButton": abbrev = "r"; break;
-    case "yellowButton": abbrev = "y"; break;
-    case "greenButton": abbrev = "g"; break;
-    case "blueButton": abbrev = "b"; break;
-    default : break;
-  }
-  return abbrev + ", " + stroke.time;
+// Our second datatype: a name-strokearray pair
+function Track (name, strokeList) {
+  this.name = name;
+  this.strokeList = strokeList;
+  this.nextFreeIndex = strokeList.length;
+  console.log('new Track: ' + this.name + this.nextFreeIndex);
 }
 
-// Sorted list of all user key strokes
-var strokeHistory = [];
-var nextFreeIndex = 0;
-function addStroke (stroke) {
-  strokeHistory[nextFreeIndex] = stroke;
-  nextFreeIndex++;
+// Adds a stroke to a track
+function addStroke (track, stroke) {
+  if (track === 'undefined' || stroke === 'undefined') {
+    console.log('track/stroke undefined');
+  } else {
+    track.strokeList[track.nextFreeIndex] = stroke;
+    track.nextFreeIndex++;
+  }
 }
+
+// List of all user key strokes sorted on timeSinceStart
+var strokeHistory = Track('History', []);
 
 // Contains all strokes of the song
-const songStrokes = [];
+const songStrokes = Track('Happy End of the World', []);
+const testStrokes = Track('Test', [Stroke('redButton'), Stroke('blueButton')]);
 
-/////////
+function testPrint () {
+  console.log(testStrokes);
+//  console.log(printTrack(testStrokes));
+}
+
+var tracks = [songStrokes, testStrokes];
+var nextFreeIndexTracks = 2;
+function addTrack (track) {
+  tracks[nextFreeIndexTracks] = track;
+  nextFreeIndexTracks++;
+}
+
+// Demonstrates a botergeile layout
+function dropdownMenu () {
+  var dropdownMenu = document.getElementById('dropdownMenuTest');
+  var flatHtml = '';
+  for (var i = 0; i < 10; i++) {
+    flatHtml += '<a href="#">' + i + '</a>';
+  }
+  dropdownMenu.innerHTML = flatHtml;
+}
+
+// actual function, still debugging this though
+function generateDropdownMenu () {
+  var dropdownMenu = document.getElementById('dropdownMenu');
+  if (dropdownMenu) {
+    console.log('all tracks: ' + tracks);
+    console.log('tracks length: ' + tracks.length);
+    // console.log('track: ' + printTrack(track));
+    var flatHtml = '';
+    for (var i = 0; i < tracks.length; i++) {
+      flatHtml += '<a href="#">' + i + '</a>';
+      console.log('track ' + i + ': ' + tracks[i]);
+    }
+    dropdownMenu.innerHTML = flatHtml;
+  }
+}
+
+// //////////
 // Controller
-/////////
-
+// //////////
+// TODO: de-lambdafunction them
 document.addEventListener('keydown', (event) => {
   const keyName = event.key;
   const buttonName = keyToButton(keyName);
-  if (buttonName != null){
+  const stroke = Stroke(buttonName);
+  if (buttonName != null) {
     document.getElementById(buttonName).style.visibility = 'visible';
-    addStroke(new Stroke(buttonName));
+    console.log('strokeHistory' + strokeHistory);
+    addStroke(strokeHistory, stroke);
   }
-//  Add when History is added
-//  var currentStroke = new Stroke(keyName);
-//  addStroke(currentStroke);
 }, false);
 
 document.addEventListener('keyup', (event) => {
   const keyName = event.key;
   const buttonName = keyToButton(keyName);
-  if (buttonName != null){
+  if (buttonName != null) {
     document.getElementById(buttonName).style.visibility = 'hidden';
   }
 }, false);
 
 // Key to button mapping
-// I want to make a Maybe of this
+// I want to make a Maybe Enumerate of this
 function keyToButton (keyName) {
   var button = null;
   switch (keyName) {
-    case 'q': button = "redButton"; break;
-    case 'w': button = "yellowButton"; break;
-    case 'e': button = "greenButton"; break;
-    case 'r': button = "blueButton"; break;
+    case 'q': button = 'redButton'; break;
+    case 'w': button = 'yellowButton'; break;
+    case 'e': button = 'greenButton'; break;
+    case 'r': button = 'blueButton'; break;
     default : break;
   }
   return button;
 }
 
-/////////
+// //////////
 // View
-/////////
+// //////////
 
-// Readable string dataformat for Stroke history
-function printStrokeHistory () {
-  var outputString = "";
-  for (var i = 0; i < strokeHistory.length; i++) {
-    outputString += strokeHistory[i].toString();
-    outputString += "/n";
+// First: print functions for our datatypes
+// Note: Overriding toString didn't work :(
+
+// Readable string format for a Stroke
+function printStroke (stroke) {
+  var abbrev = 'Undef toString Stroke';
+  switch (stroke.button) {
+    case 'redButton': abbrev = 'r'; break;
+    case 'yellowButton': abbrev = 'y'; break;
+    case 'greenButton': abbrev = 'g'; break;
+    case 'blueButton': abbrev = 'b'; break;
+    default : break;
   }
-  document.getElementById('modalContent').innerHTML = outputString;
+  return abbrev + ', ' + stroke.time;
+}
+
+// Readable string format for Stroke list
+function printStrokeList (strokeList) {
+  var outputString = '';
+  for (var i = 0; i < strokeList.length; i++) {
+    outputString += printStroke(strokeList[i]);
+    outputString += '/n';
+  }
+  return outputString;
+}
+
+// Readable string format for a Track
+function printTrack (track) {
+  var outputString = '';
+  outputString += track.name;
+  outputString += ': ';
+  outputString += printStrokeList(track.strokeList);
+  return outputString;
 }
 
 /*

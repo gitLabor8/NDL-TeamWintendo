@@ -1,3 +1,9 @@
+/* Global variables */
+:root {
+  --magenta: #e62272
+}
+
+/* Guitar buttons */
 .row {
   width:   100%
 }
@@ -68,5 +74,5 @@
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
-   background-color: #e62272;
+   background-color: var(--magenta);
 }

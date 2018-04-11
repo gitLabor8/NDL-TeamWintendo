@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <link rel="stylesheet" type="text/css" href="guitar.css">
-  <script src="guitar.js"></script>
   <script type="text/javascript" src="jquery.min.js"></script>
+  <script src="guitar.js"></script>
 
   <!-- Loading in the modal.
   Warning: scripts need to be run on server, otherwise Chrome raises security issues. Use Firefox for local testing !-->
   <script>
-  $(function(){
+  $(document).ready(function(){
     $("#historyModal").load("guitarDebugModal.html");
   });
   </script>
 </head>
 
-<body>
+<body onLoad="generateDropdownMenu()">
   <div class="row" id="btnRow">
     <div class="btn red"    id="redButton"></div>
     <div class="btn yellow" id="yellowButton"></div>
@@ -25,11 +25,12 @@
 
   <div id="historyModal"></div>
 
+  <div>
+    <button onClick="testPrint()">Click me!</button>
+  </div>
+
   <div class="dropdown">
     <button class="dropbtn">Dropdown</button>
-    <div class="dropdown-content">
-     <a href="#">Happy End of the World</a>
-    </div>
+    <div id="dropdownMenuTest" class="dropdown-content"></div>
   </div>
 </body>
-</html>
