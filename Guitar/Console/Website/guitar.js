@@ -21,17 +21,20 @@ function timeSinceStart () {
 }
 
 // Our first datatype: a button-time pair
-function Stroke (buttonName) {
-  this.button = buttonName;
-  this.time = timeSinceStart();
+class Stroke {
+  constructor (buttonName) {
+    this.button = buttonName;
+    this.time = timeSinceStart();
+  }
 }
 
 // Our second datatype: a name-strokearray pair
-function Track (name, strokeList) {
-  this.name = name;
-  this.strokeList = strokeList;
-  this.nextFreeIndex = strokeList.length;
-  console.log('new Track: ' + this.name + this.nextFreeIndex);
+class Track {
+  constructor (name, strokeList) {
+    this.name = name;
+    this.strokeList = strokeList;
+    this.nextFreeIndex = strokeList.length;
+  }
 }
 
 // Adds a stroke to a track
@@ -45,15 +48,14 @@ function addStroke (track, stroke) {
 }
 
 // List of all user key strokes sorted on timeSinceStart
-var strokeHistory = Track('History', []);
+var strokeHistory = new Track('History', []);
 
 // Contains all strokes of the song
-const songStrokes = Track('Happy End of the World', []);
-const testStrokes = Track('Test', [Stroke('redButton'), Stroke('blueButton')]);
+const songStrokes = new Track('Happy End of the World', []);
+const testStrokes = new Track('Test', [new Stroke('redButton'), new Stroke('blueButton')]);
 
 function testPrint () {
-  console.log(testStrokes);
-//  console.log(printTrack(testStrokes));
+  console.log(printTrack(testStrokes));
 }
 
 var tracks = [songStrokes, testStrokes];
@@ -63,43 +65,29 @@ function addTrack (track) {
   nextFreeIndexTracks++;
 }
 
-// Demonstrates a botergeile layout
-function dropdownMenu () {
-  var dropdownMenu = document.getElementById('dropdownMenuTest');
-  var flatHtml = '';
-  for (var i = 0; i < 10; i++) {
-    flatHtml += '<a href="#">' + i + '</a>';
-  }
-  dropdownMenu.innerHTML = flatHtml;
-}
-
+// TODO: make onClicks with function
 // actual function, still debugging this though
 function generateDropdownMenu () {
   var dropdownMenu = document.getElementById('dropdownMenu');
   if (dropdownMenu) {
-    console.log('all tracks: ' + tracks);
-    console.log('tracks length: ' + tracks.length);
-    // console.log('track: ' + printTrack(track));
-    var flatHtml = '';
+    var flatHtml = '<ul id="dropdownMenu">';
     for (var i = 0; i < tracks.length; i++) {
-      flatHtml += '<a href="#">' + i + '</a>';
-      console.log('track ' + i + ': ' + tracks[i]);
+      flatHtml += '<li>' + tracks[i].name + '</li>';
     }
-    dropdownMenu.innerHTML = flatHtml;
+    flatHtml += '</ul>';
+    dropdownMenu.innerHTML += flatHtml;
   }
 }
 
 // //////////
 // Controller
 // //////////
-// TODO: de-lambdafunction them
 document.addEventListener('keydown', (event) => {
   const keyName = event.key;
   const buttonName = keyToButton(keyName);
-  const stroke = Stroke(buttonName);
+  const stroke = new Stroke(buttonName);
   if (buttonName != null) {
     document.getElementById(buttonName).style.visibility = 'visible';
-    console.log('strokeHistory' + strokeHistory);
     addStroke(strokeHistory, stroke);
   }
 }, false);
@@ -143,15 +131,16 @@ function printStroke (stroke) {
     case 'blueButton': abbrev = 'b'; break;
     default : break;
   }
-  return abbrev + ', ' + stroke.time;
+  return abbrev + ',' + stroke.time;
 }
 
-// Readable string format for Stroke list
+// Readable string format for Stroke list, prints at most 10 elements
 function printStrokeList (strokeList) {
   var outputString = '';
-  for (var i = 0; i < strokeList.length; i++) {
+  for (var i = 0; i < max(strokeList.length, 10); i++) {
+    outputString += '(';
     outputString += printStroke(strokeList[i]);
-    outputString += '/n';
+    outputString += ') ';
   }
   return outputString;
 }
