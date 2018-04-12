@@ -23,14 +23,19 @@
     <div class="btn blue"   id="blueButton"></div>
   </div>
 
-  <div id="historyModal"></div>
+  <ul id="horizontalMenu" class="horizontalMenu">
 
-  <div>
-    <button onClick="testPrint()">Click me!</button>
-  </div>
+    <!-- Playing tracks !-->
+    <li id="dropdownMenu" class="dropdownMenu">
+      <button class="button">Select a Track</button>
+      <div id="dropdown-content" class="dropdown-content"></div>
+    </li>
 
-  <div id="dropdown" class="dropdown">
-    <button class="dropbtn">Dropdown</button>
-    <div id="dropdownMenu" class="dropdown-content"></div>
-  </div>
+    <!-- Creating tracks !-->
+    <li id="saveMenu">
+      <button onClick="saveHistory()" class="button">Save History</button>
+      <input id="newTrackNameInput" type="text" value="Save 1">
+    </li>
+    <li><button onClick="deleteHistory()" class="button">Restart recording</button></li>
+  </ul>
 </body>
