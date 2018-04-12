@@ -29,19 +29,39 @@
   background-color: blue;
 }
 
-/* Dropdown menu css */
+/****** Horizontal Menu css *****/
 
-/* Dropdown Button */
-.dropbtn {
+.horizontalMenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    background-color: #fff;
+}
+
+.horizontalMenu li {
+    float: left;
+    padding: 2px;
+}
+
+/* horizontalMenu Button */
+.button {
    background-color: #000000;
    color: white;
    padding: 16px;
    font-size: 16px;
    border: none;
+   text-align: center;
 }
 
+.button:hover {
+  background-color: var(--magenta);
+}
+
+/******* Dropdown menu css ******/
+
 /* The container <div> - needed to position the dropdown content */
-.dropdown {
+.dropdownMenu {
    position: relative;
    display: inline-block;
 }
@@ -51,28 +71,25 @@
    display: none;
    position: absolute;
    background-color: #f1f1f1;
-   min-width: 160px;
+   min-width: 260px;
    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
    z-index: 1;
 }
 
-/* Links inside the dropdown */
-.dropdown-content a {
+/* list items inside the dropdown */
+.dropdown-content li {
    color: black;
-   padding: 12px 16px;
+   padding: 4px 4px 4px 4px;
    text-decoration: none;
    display: block;
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd}
-
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {
-  display: block;
+.dropdown-content li:hover {
+  background-color: #ddd;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {
-   background-color: var(--magenta);
+/* Show the dropdown menu on hover */
+.dropdownMenu:hover .dropdown-content {
+  display: block;
 }

@@ -47,36 +47,51 @@ function addStroke (track, stroke) {
   }
 }
 
-// List of all user key strokes sorted on timeSinceStart
-var strokeHistory = new Track('History', []);
-
 // Contains all strokes of the song
 const songStrokes = new Track('Happy End of the World', []);
-const testStrokes = new Track('Test', [new Stroke('redButton'), new Stroke('blueButton')]);
+// A test song
+const testSong = new Track('Test', [new Stroke('redButton'), new Stroke('blueButton')]);
 
-function testPrint () {
-  console.log(printTrack(testStrokes));
-}
-
-var tracks = [songStrokes, testStrokes];
+var tracks = [songStrokes, testSong];
 var nextFreeIndexTracks = 2;
 function addTrack (track) {
   tracks[nextFreeIndexTracks] = track;
   nextFreeIndexTracks++;
+  // Refresh the dropdownMenu
+  generateDropdownMenu();
 }
 
 // TODO: make onClicks with function
-// actual function, still debugging this though
 function generateDropdownMenu () {
-  var dropdownMenu = document.getElementById('dropdownMenu');
-  if (dropdownMenu) {
-    var flatHtml = '<ul id="dropdownMenu">';
+  var dropdownContent = document.getElementById('dropdown-content');
+  if (dropdownContent) {
+    var flatHtml = '<ul id="dropdownList">';
     for (var i = 0; i < tracks.length; i++) {
-      flatHtml += '<li>' + tracks[i].name + '</li>';
+      flatHtml += '<li onClick="playTrack(' + tracks[i] + ')" class="dropdown-content">' + tracks[i].name + '</li>';
     }
     flatHtml += '</ul>';
-    dropdownMenu.innerHTML += flatHtml;
+    dropdownContent.innerHTML = flatHtml;
   }
+}
+
+function playTrack (track) {
+  console.log('now playing: ' + track.name);
+}
+
+// List of all user key strokes sorted on timeSinceStart
+var strokeHistory = new Track('History', []);
+
+function deleteHistory () {
+  strokeHistory = new Track('History', []);
+  resetTime();
+}
+
+function saveHistory () {
+  var newTrackName = document.getElementById('newTrackNameInput').value;
+  var newTrack = new Track(newTrackName, strokeHistory.strokeList);
+  console.log('in saveHistory: ' + printTrack(newTrack));
+  addTrack(newTrack);
+  deleteHistory();
 }
 
 // //////////
@@ -123,24 +138,32 @@ function keyToButton (keyName) {
 
 // Readable string format for a Stroke
 function printStroke (stroke) {
-  var abbrev = 'Undef toString Stroke';
-  switch (stroke.button) {
-    case 'redButton': abbrev = 'r'; break;
-    case 'yellowButton': abbrev = 'y'; break;
-    case 'greenButton': abbrev = 'g'; break;
-    case 'blueButton': abbrev = 'b'; break;
-    default : break;
+  var abbrev = 'Undef/null toString Stroke';
+  if (stroke === 'undefined' || stroke === 'null') {
+    return abbrev;
+  } else {
+    switch (stroke.button) {
+      case 'redButton': abbrev = 'r'; break;
+      case 'yellowButton': abbrev = 'y'; break;
+      case 'greenButton': abbrev = 'g'; break;
+      case 'blueButton': abbrev = 'b'; break;
+      default : break;
+    }
+    return abbrev + ',' + stroke.time;
   }
-  return abbrev + ',' + stroke.time;
 }
 
-// Readable string format for Stroke list, prints at most 10 elements
+// Readable string format for Stroke list, prints at most 5 elements
 function printStrokeList (strokeList) {
   var outputString = '';
-  for (var i = 0; i < max(strokeList.length, 10); i++) {
-    outputString += '(';
-    outputString += printStroke(strokeList[i]);
-    outputString += ') ';
+  if (strokeList === 'undefined') {
+    console.log('strokeList undefined');
+  } else {
+    for (var i = 0; i < Math.min(strokeList.length, 5); i++) {
+      outputString += '(';
+      outputString += printStroke(strokeList[i]);
+      outputString += ') ';
+    }
   }
   return outputString;
 }
