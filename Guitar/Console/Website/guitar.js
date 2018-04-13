@@ -60,18 +60,6 @@ function addTrack (track) {
   // Refresh the dropdownMenu
   generateDropdownMenu();
 }
-/* Redundant?
-// Needed because we cannot pass full function arguments through text
-function findTrack (name) {
-  for (var i = 0; i < nextFreeIndexTracks; i++) {
-    if (name === tracks[i].name) {
-      return tracks[i];
-    }
-  }
-  console.log('Couldn\'t find track: ' + name);
-  return undefined;
-}
-*/
 
 function generateDropdownMenu () {
   var dropdownContent = document.getElementById('dropdown-content');
@@ -81,8 +69,8 @@ function generateDropdownMenu () {
     newDropdownList.id = 'dropdownList';
     for (var i = 0; i < tracks.length; i++) {
       var trackEntry = document.createElement('li');
-      trackEntry.addEventListener('click', playTrack(tracks[i]));
-      trackEntry.class = 'dropdown-content';
+      trackEntry.id = 'trackEntry' + i;
+      trackEntry.classList.add('dropdown-content');
       var text = document.createTextNode(tracks[i].name);
       trackEntry.appendChild(text);
       newDropdownList.appendChild(trackEntry);
@@ -202,21 +190,22 @@ var updateTime = (1/fps) * 1000;
 function showFutureStrokes (track) {
   if (track) {
     for (var i = 0; i < track.strokeList.length; i++) {
-      console.log(i);
       showStroke(track.strokeList[i]);
     }
   }
 }
 
 function showStroke (stroke) {
+  var containerDiv = document.createElement('div');
+  containerDiv.style['padding-top'] = '70%';
+
   var strokeDiv = document.createElement('div');
   var colour = buttonToColour(stroke.button);
   strokeDiv.classList.add(colour);
   strokeDiv.classList.add('strokeToCome');
-  strokeDiv.style.height = '70%';
   var strip = document.getElementById(colour + 'Strip');
-  strip.appendChild(strokeDiv);
-  console.log('hoi');
+  containerDiv.appendChild(strokeDiv);
+  strip.appendChild(containerDiv);
 }
 
 // Returns the CSS class of the strip that the given stroke belongs to
