@@ -50,9 +50,9 @@ function addStroke (track, stroke) {
 // Contains all strokes of the song
 const songStrokes = new Track('Happy End of the World', []);
 // A test song
-const testSong = new Track('Test', [new Stroke('redButton'), new Stroke('blueButton')]);
+const testTrack = new Track('Test', [new Stroke('redButton'), new Stroke('blueButton')]);
 
-var tracks = [songStrokes, testSong];
+var tracks = [songStrokes, testTrack];
 var nextFreeIndexTracks = 2;
 function addTrack (track) {
   tracks[nextFreeIndexTracks] = track;
@@ -60,17 +60,34 @@ function addTrack (track) {
   // Refresh the dropdownMenu
   generateDropdownMenu();
 }
+/* Redundant?
+// Needed because we cannot pass full function arguments through text
+function findTrack (name) {
+  for (var i = 0; i < nextFreeIndexTracks; i++) {
+    if (name === tracks[i].name) {
+      return tracks[i];
+    }
+  }
+  console.log('Couldn\'t find track: ' + name);
+  return undefined;
+}
+*/
 
-// TODO: make onClicks with function
 function generateDropdownMenu () {
   var dropdownContent = document.getElementById('dropdown-content');
+  var oldDropdownList = document.getElementById('dropdownList');
   if (dropdownContent) {
-    var flatHtml = '<ul id="dropdownList">';
+    var newDropdownList = document.createElement('ul');
+    newDropdownList.id = 'dropdownList';
     for (var i = 0; i < tracks.length; i++) {
-      flatHtml += '<li onClick="playTrack(' + tracks[i] + ')" class="dropdown-content">' + tracks[i].name + '</li>';
+      var trackEntry = document.createElement('li');
+      trackEntry.addEventListener('click', playTrack(tracks[i]));
+      trackEntry.class = 'dropdown-content';
+      var text = document.createTextNode(tracks[i].name);
+      trackEntry.appendChild(text);
+      newDropdownList.appendChild(trackEntry);
     }
-    flatHtml += '</ul>';
-    dropdownContent.innerHTML = flatHtml;
+    dropdownContent.replaceChild(newDropdownList, oldDropdownList);
   }
 }
 
@@ -177,26 +194,42 @@ function printTrack (track) {
   return outputString;
 }
 
-/*
 // heighten as much as hardware allows
 var fps = 10;
-var updateTime = (1/fps)*1000;
-setInterval(newKeyStrokes.forEach(showButtons), updateTime);
+var updateTime = (1/fps) * 1000;
 
-function showButtons (item, index) {
-  var d = new Date();
-  var now = d.getTime();
-  var i = 0;
-  // Set to a default keystroke
-  var heldButton = 'undef';
-  var lastKeyStroke;
-  // Show all recently added strokes
-  do {
-    i++;
-    document.getElementById(heldButton).style.visibility = 'visible';
-    lastKeyStroke = keyStrokes[keyStrokes.length - i];
-    heldButton = lastKeyStroke.button;
+// Shows strokes that will come in the next 3 seconds
+function showFutureStrokes (track) {
+  if (track) {
+    for (var i = 0; i < track.strokeList.length; i++) {
+      console.log(i);
+      showStroke(track.strokeList[i]);
+    }
   }
-  while (lastKeyStroke.time + updateTime > now);
 }
-*/
+
+function showStroke (stroke) {
+  var strokeDiv = document.createElement('div');
+  var colour = buttonToColour(stroke.button);
+  strokeDiv.classList.add(colour);
+  strokeDiv.classList.add('strokeToCome');
+  strokeDiv.style.height = '70%';
+  var strip = document.getElementById(colour + 'Strip');
+  strip.appendChild(strokeDiv);
+  console.log('hoi');
+}
+
+// Returns the CSS class of the strip that the given stroke belongs to
+function buttonToColour (button) {
+  var strip = 'Error! Undef/null';
+  if (button !== 'undefined' || button !== 'null') {
+    switch (button) {
+      case 'redButton': strip = 'red'; break;
+      case 'yellowButton': strip = 'yellow'; break;
+      case 'greenButton': strip = 'green'; break;
+      case 'blueButton': strip = 'blue'; break;
+      default : break;
+    }
+  }
+  return strip;
+}

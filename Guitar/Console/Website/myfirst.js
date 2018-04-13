@@ -1,5 +1,7 @@
 // var http = require('http');
 var fs = require('fs');
+// let jsonData = require('./Song.json');
+// var jsonString = JSON.stringify(jsonData);
 
 var filePath = './notes.json';
 var file = fs.readFileSync(filePath);
@@ -10,8 +12,15 @@ var path = require('path');
 
 app.set('view engine', 'ejs');
 
+fs.watchFile(filePath, function () {
+  console.log('File1 Changed ...');
+  file = fs.readFileSync(filePath);
+  console.log('File1 content at : ' + new Date() + ' is \n ' + file);
+});
+
 app.get('/', function (req, res) {
-  res.render('guitar');
+  var data = {'notes': file};
+  res.render('guitar', {data: data});
 });
 
 app.use(express.static(path.join(__dirname, 'Views')));
