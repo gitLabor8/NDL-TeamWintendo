@@ -22,7 +22,7 @@ while True:
             camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
 
             #Opens the picture that was taken and makes a pixelmap of it.
-            im = Image.open('The_Image.jpg')
+            im = Image.open('/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg')
             pixelMap = im.load()
 
             #Creates the counters for the amount of white pixels on the place of the button on the picture.
