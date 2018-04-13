@@ -3,18 +3,54 @@
   --magenta: #e62272
 }
 
-/* Guitar buttons */
-.row {
-  width:   100%
+/***** Drawing canvas ****/
+
+.canvas {
+  position: relative;
+  height: 600px;
+  width: 600px;
+}
+.playfield {
+  position: absolute;
+  heigth: 600px;
+  width: 100%;
+}
+
+.strokeStrip {
+  width: 136px;
+  height: 600px;
+  margin: 6px;
+  position: relative;
+  display: inline-block;
+  float: left;
+}
+
+.strokeToCome {
+  position: relative;
+  visibility: visible;
+  border: 1px solid black;
+  height: 20px;
+  width: 136px;
+  margin: 6px;
+  display: inline-block;
+  float: left;
+}
+
+/* Guitar button row */
+.btnrow {
+  width: 100%;
+  padding-top: 560px;
+  list-style-type: none;
 }
 .btn {
+  position: relative;
   visibility: hidden;
-  border:  1px solid black;
-  widows:  10px; /* Make this pritty */
-  height:  10px;
-  padding: 10px;
-  margin:  10px;
+  border: 1px solid black;
+  height: 20px;
+  width: 136px;
+  margin: 6px;
   display: inline-block;
+  float: left;
 }
 .red {
   background-color: red;
@@ -32,11 +68,14 @@
 /****** Horizontal Menu css *****/
 
 .horizontalMenu {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: visible;
-    background-color: #fff;
+  position: relative;
+  list-style-type: none;
+  height: 100px;
+  width: 600px;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  background-color: #fff;
 }
 
 .horizontalMenu li {
@@ -76,12 +115,20 @@
    z-index: 1;
 }
 
+.dropdown-content ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #fff;
+}
+
 /* list items inside the dropdown */
 .dropdown-content li {
    color: black;
    padding: 4px 4px 4px 4px;
    text-decoration: none;
-   display: block;
+   display: auto;
 }
 
 /* Change color of dropdown links on hover */
