@@ -16,11 +16,24 @@
 </head>
 
 <body onLoad="generateDropdownMenu()">
-  <div class="row" id="btnRow">
-    <div class="btn red"    id="redButton"></div>
-    <div class="btn yellow" id="yellowButton"></div>
-    <div class="btn green"  id="greenButton"></div>
-    <div class="btn blue"   id="blueButton"></div>
+  <script>
+    function updateNotes() {
+      document.getElementById("showNotes").innerHTML="<% =notes %>";
+    }
+    setInterval("updateNotes()", 2000);
+  </script>
+
+  <div id="canvas" class="canvas">
+    <div id="playField" class="playfield">
+      <div id="redStrip" class="strokeStrip"></div>
+      <div id="blueStrip" class="strokeStrip"></div>
+    </div>
+    <ul id="btnRow" class="btnrow">
+      <li id="redButton" class="btn red"></li>
+      <li id="yellowButton" class="btn yellow"></li>
+      <li id="greenButton" class="btn green"></li>
+      <li id="blueButton" class="btn blue"></li>
+    </ul>
   </div>
 
   <ul id="horizontalMenu" class="horizontalMenu">
@@ -28,7 +41,9 @@
     <!-- Playing tracks !-->
     <li id="dropdownMenu" class="dropdownMenu">
       <button class="button">Select a Track</button>
-      <div id="dropdown-content" class="dropdown-content"></div>
+      <div id="dropdown-content" class="dropdown-content">
+        <lu id="dropdownList">Placeholder</lu>
+      </div>
     </li>
 
     <!-- Creating tracks !-->
@@ -37,5 +52,6 @@
       <input id="newTrackNameInput" type="text" value="Save 1">
     </li>
     <li><button onClick="deleteHistory()" class="button">Restart recording</button></li>
+    <li><button onClick="showFutureStrokes(testTrack)" class="button">Test</button></li>
   </ul>
 </body>
