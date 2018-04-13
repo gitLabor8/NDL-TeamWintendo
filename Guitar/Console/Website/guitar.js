@@ -239,15 +239,21 @@ function showFutureStrokes (track) {
 
 function showStroke (stroke) {
   var containerDiv = document.createElement('div');
-  containerDiv.style['padding-top'] = '70%';
+  // Only render if it's 3000ms ahead
+  // console.log('diff: ' + stroke.time - timeSinceStart);
+  if (stroke.time - timeSinceStart() < 3000) {
+    var topOffset = 3000 / (stroke.time - timeSinceStart) * 550;
+    console.log('offset: ' + topOffset);
+    containerDiv.style['padding-top'] = topOffset;
 
-  var strokeDiv = document.createElement('div');
-  var colour = buttonToColour(stroke.button);
-  strokeDiv.classList.add(colour);
-  strokeDiv.classList.add('strokeToCome');
-  var strip = document.getElementById(colour + 'Strip');
-  containerDiv.appendChild(strokeDiv);
-  strip.appendChild(containerDiv);
+    var strokeDiv = document.createElement('div');
+    var colour = buttonToColour(stroke.button);
+    strokeDiv.classList.add(colour);
+    strokeDiv.classList.add('strokeToCome');
+    var strip = document.getElementById(colour + 'Strip');
+    containerDiv.appendChild(strokeDiv);
+    strip.appendChild(containerDiv);
+  }
 }
 
 // Returns the CSS class of the strip that the given stroke belongs to
