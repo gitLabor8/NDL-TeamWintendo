@@ -99,6 +99,48 @@ function saveHistory () {
   deleteHistory();
 }
 
+/*
+// Janneau code
+$(function () {
+
+  var howlerExample = new Howl({
+    src: ['ParserAndResult/Alone.mp3'],
+    volume: 0.5
+  });
+
+  $('#howler-play').on('click', function () {
+    howlerExample.play();
+  });
+
+  $('#howler-pause').on('click', function () {
+    howlerExample.pause();
+  });
+
+  $('#howler-stop').on('click', function () {
+    howlerExample.stop();
+  });
+
+  $('#howler-volup').on('click', function () {
+    var vol = howlerExample.volume();
+    vol += 0.1;
+    if (vol > 1) {
+      vol = 1;
+    }
+    howlerExample.volume(vol);
+  });
+
+  $('#howler-voldown').on('click', function () {
+    var vol = howlerExample.volume();
+    vol -= 0.1;
+    if (vol < 0) {
+      vol = 0;
+    }
+    howlerExample.volume(vol);
+  });
+
+});
+/**/
+
 // //////////
 // Controller
 // //////////
