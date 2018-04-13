@@ -11,8 +11,7 @@ camera.resolution = (1280, 720)
 #Opens the serial port where the Arduino is hooked up to, so it can be read.
 ser = serial.Serial("/dev/ttyUSB0", 9600)
 
-#This iterator is to prevent a file from being read from and written to at the same time.
-fileIterator = 0
+notes = {"R" : 0, "Y" : 0, "G" : 0, "B" : 0}
 
 #Continues while loop to check if we get input form the Arduino and if a picture must then be taken.
 while True:
@@ -66,31 +65,28 @@ while True:
 
             #For every button converts the amount of "white" pixels to wheter it is a stroke or not.
             if(whitePixelbutton1 > 60):
-                redButton = ''
+                notes["R"] = 0
             else:
-                redButton = 'r '
+                notes["R"] = 1
                 
             if(whitePixelbutton2 > 60):
-                yellowButton = ''
+                notes["Y"] = 0
             else:
-                yellowButton = 'y '
+                notes["Y"] = 1
                 
             if(whitePixelbutton3 > 60):
-                greenButton = ''
+                notes["G"] = 0
             else:
-                greenButton = 'g '
+                notes["G"] = 1
                 
             if(whitePixelbutton4 > 60):
-                blueButton = ''
+                notes["B"] = 0
             else:
-                blueButton = 'b '
+                notes["B"] = 1
                        
             #Prints the bits for every button in a json file.
-            with open('JSONData{0}.json'.format(fileIterator), 'w') as file:
-                json.dump(redButton + yellowButton + greenButton + blueButton, file)
-            
-            #Increaces the fileIterator so next time the value gets written to a drifrent file with 3 difrent files.
-            fileIterator = (fileIterator + 1)%3
+            with open('notes.json', 'w') as file:
+                json.dump(notes, file)
             
             #Closes the image.
             im.close()

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" type="text/css" href="guitar.css">
+  <script type="text/javascript" src="jquery.min.js"></script>
+  <script src="guitar.js"></script>
+
+  <!-- Loading in the modal.
+  Warning: scripts need to be run on server, otherwise Chrome raises security issues. Use Firefox for local testing !-->
+  <script>
+  $(document).ready(function(){
+    $("#historyModal").load("guitarDebugModal.html");
+  });
+  </script>
+</head>
+
+<body onLoad="generateDropdownMenu()">
+  <div class="row" id="btnRow">
+    <div class="btn red"    id="redButton"></div>
+    <div class="btn yellow" id="yellowButton"></div>
+    <div class="btn green"  id="greenButton"></div>
+    <div class="btn blue"   id="blueButton"></div>
+  </div>
+
+  <ul id="horizontalMenu" class="horizontalMenu">
+
+    <!-- Playing tracks !-->
+    <li id="dropdownMenu" class="dropdownMenu">
+      <button class="button">Select a Track</button>
+      <div id="dropdown-content" class="dropdown-content"></div>
+    </li>
+
+    <!-- Creating tracks !-->
+    <li id="saveMenu">
+      <button onClick="saveHistory()" class="button">Save History</button>
+      <input id="newTrackNameInput" type="text" value="Save 1">
+    </li>
+    <li><button onClick="deleteHistory()" class="button">Restart recording</button></li>
+  </ul>
+</body>
