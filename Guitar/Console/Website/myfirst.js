@@ -1,41 +1,29 @@
 // var http = require('http');
 var fs = require('fs');
 
-var filePath1 = './notes1.json';
-var filePath2 = './notes2.json';
-var filePath3 = './notes3.json';
-var file1 = fs.readFileSync(filePath1);
-var file2 = fs.readFileSync(filePath2);
-var file3 = fs.readFileSync(filePath3);
+var filePath = './notes.json';
+var file = fs.readFileSync(filePath);
 
 var express = require('express');
 var app = express();
 var path = require('path');
 
+app.set('view engine', 'ejs');
+
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '/guitar.html'));
+  res.render('guitar');
 });
+
+app.use(express.static(path.join(__dirname, 'Views')));
 
 app.listen(8080);
 
-console.log('Initial File content : ' + file1);
-console.log('Initial File content : ' + file2);
-console.log('Initial File content : ' + file3);
+console.log('Initial File content : ' + file);
 
-fs.watchFile(filePath1, function () {
+fs.watchFile(filePath, function () {
   console.log('File1 Changed ...');
-  file1 = fs.readFileSync(filePath1);
-  console.log('File1 content at : ' + new Date() + ' is \n ' + file1);
-});
-fs.watchFile(filePath2, function () {
-  console.log('File2 Changed ...');
-  file2 = fs.readFileSync(filePath2);
-  console.log('File2 content at : ' + new Date() + ' is \n ' + file2);
-});
-fs.watchFile(filePath3, function () {
-  console.log('File3 Changed ...');
-  file3 = fs.readFileSync(filePath3);
-  console.log('File3 content at : ' + new Date() + ' is \n ' + file3);
+  file = fs.readFileSync(filePath);
+  console.log('File1 content at : ' + new Date() + ' is \n ' + file);
 });
 
 // let jsonData = require('./Song.json');
