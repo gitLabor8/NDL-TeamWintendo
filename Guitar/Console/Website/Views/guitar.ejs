@@ -16,12 +16,9 @@
 </head>
 
 <body onLoad="generateDropdownMenu()">
-  <script>
-    function updateNotes() {
-      document.getElementById("showNotes").innerHTML="<% =notes %>";
-    }
-    setInterval("updateNotes()", 2000);
-  </script>
+  <% data.data.forEach(function (item) { %>
+    <li><%= item %></li>
+  <% }); %>
 
   <div id="canvas" class="canvas">
     <div id="playField" class="playfield">
