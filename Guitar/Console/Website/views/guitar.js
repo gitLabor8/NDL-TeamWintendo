@@ -60,18 +60,6 @@ function addTrack (track) {
   // Refresh the dropdownMenu
   generateDropdownMenu();
 }
-/* Redundant?
-// Needed because we cannot pass full function arguments through text
-function findTrack (name) {
-  for (var i = 0; i < nextFreeIndexTracks; i++) {
-    if (name === tracks[i].name) {
-      return tracks[i];
-    }
-  }
-  console.log('Couldn\'t find track: ' + name);
-  return undefined;
-}
-*/
 
 function generateDropdownMenu () {
   var dropdownContent = document.getElementById('dropdown-content');
@@ -81,8 +69,8 @@ function generateDropdownMenu () {
     newDropdownList.id = 'dropdownList';
     for (var i = 0; i < tracks.length; i++) {
       var trackEntry = document.createElement('li');
-      trackEntry.addEventListener('click', playTrack(tracks[i]));
-      trackEntry.class = 'dropdown-content';
+      trackEntry.id = 'trackEntry' + i;
+      trackEntry.classList.add('dropdown-content');
       var text = document.createTextNode(tracks[i].name);
       trackEntry.appendChild(text);
       newDropdownList.appendChild(trackEntry);
@@ -110,6 +98,48 @@ function saveHistory () {
   addTrack(newTrack);
   deleteHistory();
 }
+
+
+// Janneau code
+$(function () {
+
+  var howlerExample = new Howl({
+    src: ['ParserAndResult/Alone.mp3'],
+    volume: 0.5
+  });
+
+  $('#howler-play').on('click', function () {
+    howlerExample.play();
+  });
+
+  $('#howler-pause').on('click', function () {
+    howlerExample.pause();
+  });
+
+  $('#howler-stop').on('click', function () {
+    howlerExample.stop();
+  });
+
+  $('#howler-volup').on('click', function () {
+    var vol = howlerExample.volume();
+    vol += 0.1;
+    if (vol > 1) {
+      vol = 1;
+    }
+    howlerExample.volume(vol);
+  });
+
+  $('#howler-voldown').on('click', function () {
+    var vol = howlerExample.volume();
+    vol -= 0.1;
+    if (vol < 0) {
+      vol = 0;
+    }
+    howlerExample.volume(vol);
+  });
+
+});
+/**/
 
 // //////////
 // Controller
@@ -202,21 +232,28 @@ var updateTime = (1/fps) * 1000;
 function showFutureStrokes (track) {
   if (track) {
     for (var i = 0; i < track.strokeList.length; i++) {
-      console.log(i);
       showStroke(track.strokeList[i]);
     }
   }
 }
 
 function showStroke (stroke) {
-  var strokeDiv = document.createElement('div');
-  var colour = buttonToColour(stroke.button);
-  strokeDiv.classList.add(colour);
-  strokeDiv.classList.add('strokeToCome');
-  strokeDiv.style.height = '70%';
-  var strip = document.getElementById(colour + 'Strip');
-  strip.appendChild(strokeDiv);
-  console.log('hoi');
+  var containerDiv = document.createElement('div');
+  // Only render if it's 3000ms ahead
+  // console.log('diff: ' + stroke.time - timeSinceStart);
+  if (stroke.time - timeSinceStart() < 3000) {
+    var topOffset = 3000 / (stroke.time - timeSinceStart) * 550;
+    console.log('offset: ' + topOffset);
+    containerDiv.style['padding-top'] = topOffset;
+
+    var strokeDiv = document.createElement('div');
+    var colour = buttonToColour(stroke.button);
+    strokeDiv.classList.add(colour);
+    strokeDiv.classList.add('strokeToCome');
+    var strip = document.getElementById(colour + 'Strip');
+    containerDiv.appendChild(strokeDiv);
+    strip.appendChild(containerDiv);
+  }
 }
 
 // Returns the CSS class of the strip that the given stroke belongs to

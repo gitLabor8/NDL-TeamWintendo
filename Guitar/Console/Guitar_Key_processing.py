@@ -85,7 +85,7 @@ while True:
                 notes["B"] = 1
                        
             #Prints the bits for every button in a json file.
-            with open('notes.json', 'w') as file:
+            with open('Website/notes.json', 'w') as file:
                 json.dump(notes, file)
             
             #Closes the image.
