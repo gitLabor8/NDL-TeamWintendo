@@ -12,14 +12,13 @@ var path = require('path');
 
 app.set('view engine', 'ejs');
 
-fs.watchFile(filePath, function () {
-  console.log('File1 Changed ...');
-  file = fs.readFileSync(filePath);
-  console.log('File1 content at : ' + new Date() + ' is \n ' + file);
-});
-
 app.get('/', function (req, res) {
-  var data = {'notes': file};
+  fs.watchFile(filePath, function () {
+    console.log('File1 Changed ...');
+    file = fs.readFileSync(filePath);
+    console.log('File1 content at : ' + new Date() + ' is \n ' + file);
+  });
+  var data = {data: [file]};
   res.render('guitar', {data: data});
 });
 
