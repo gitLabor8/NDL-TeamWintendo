@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html>
+
+<!-- Loading in guitar.css, guitar.js and the jquery library !-->
 <head>
   <meta charset="utf-8" />
-  <link rel="stylesheet" type="text/css" href="guitar.css">
   <script type="text/javascript" src="jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="guitar.css">
   <script src="guitar.js"></script>
 </head>
 
 <body onLoad="generateDropdownMenu()">
   <div id="canvas" class="canvas">
+    <!-- The playfield shows the strokes of the Track that are being played in the next 3 seconds !-->
     <div id="playField" class="playfield">
       <div id="redStrip" class="strokeStrip"></div>
       <div id="yellowStrip" class="strokeStrip"></div>
       <div id="greenStrip" class="strokeStrip"></div>
       <div id="blueStrip" class="strokeStrip"></div>
     </div>
+    <!-- The buttonrow shows the nodes that are currently being played !-->
     <ul id="btnRow" class="btnrow">
       <li id="redButton" class="btn red"></li>
       <li id="yellowButton" class="btn yellow"></li>
@@ -23,9 +27,10 @@
     </ul>
   </div>
 
+  <!-- The Horizontal menu contains all buttons interacting with the program !-->
   <ul id="horizontalMenu" class="horizontalMenu">
 
-    <!-- Playing tracks !-->
+    <!-- Playing tracks through a dynamically created dropdown menu !-->
     <li id="dropdownMenu" class="dropdownMenu">
       <button class="button">Select a Track</button>
       <div id="dropdown-content" class="dropdown-content">
@@ -39,9 +44,10 @@
       <input id="newTrackNameInput" type="text" value="Save 1">
     </li>
     <li><button onClick="deleteHistory()" class="button">Restart recording</button></li>
+      <!-- Visualises the fact that we can save and display tracks display, awefully hardcoded !-->
     <li><button onClick="showFutureStrokes(tracks[2])" class="button">Test</button></li>
 
-    <!-- Playing Music !-->
+    <!-- Playing Music from a seperate .mp3 file !-->
     <script src="howler.js"></script>
     <li><button id='howler-play' class="button">Play</button></li>
     <li><button id='howler-pause' class="button">Pause</button></li>

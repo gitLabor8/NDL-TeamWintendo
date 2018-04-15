@@ -47,13 +47,15 @@ function addStroke (track, stroke) {
   }
 }
 
-// Contains all strokes of the song
+// Contains all strokes of the song. Currently does not read the song.
 const songStrokes = new Track('Happy End of the World', []);
-// A test song
+// A test song. Note that the timestamps of the Strokes are very low, since the Strokes are create at the moment the page is loaded, right after resetTime. We prefered this over building a second constructor, since JavaScript won't allow us to make a nice second constructor
 const testTrack = new Track('Test', [new Stroke('redButton'), new Stroke('blueButton')]);
 
+// Contains all available/playable tracks
 var tracks = [songStrokes, testTrack];
 var nextFreeIndexTracks = 2;
+// A safe way to add tracks
 function addTrack (track) {
   tracks[nextFreeIndexTracks] = track;
   nextFreeIndexTracks++;
@@ -61,89 +63,16 @@ function addTrack (track) {
   generateDropdownMenu();
 }
 
-function generateDropdownMenu () {
-  var dropdownContent = document.getElementById('dropdown-content');
-  var oldDropdownList = document.getElementById('dropdownList');
-  if (dropdownContent) {
-    var newDropdownList = document.createElement('ul');
-    newDropdownList.id = 'dropdownList';
-    for (var i = 0; i < tracks.length; i++) {
-      var trackEntry = document.createElement('li');
-      trackEntry.id = 'trackEntry' + i;
-      trackEntry.classList.add('dropdown-content');
-      var text = document.createTextNode(tracks[i].name);
-      trackEntry.appendChild(text);
-      newDropdownList.appendChild(trackEntry);
-    }
-    dropdownContent.replaceChild(newDropdownList, oldDropdownList);
-  }
-}
-
-function playTrack (track) {
-  console.log('now playing: ' + track.name);
-}
-
 // List of all user key strokes sorted on timeSinceStart
 var strokeHistory = new Track('History', []);
 
-function deleteHistory () {
-  strokeHistory = new Track('History', []);
-  resetTime();
-}
-
-function saveHistory () {
-  var newTrackName = document.getElementById('newTrackNameInput').value;
-  var newTrack = new Track(newTrackName, strokeHistory.strokeList);
-  console.log('in saveHistory: ' + printTrack(newTrack));
-  addTrack(newTrack);
-  deleteHistory();
-}
-
-
-// Janneau code
-$(function () {
-
-  var howlerExample = new Howl({
-    src: ['ParserAndResult/Alone.mp3'],
-    volume: 0.5
-  });
-
-  $('#howler-play').on('click', function () {
-    howlerExample.play();
-  });
-
-  $('#howler-pause').on('click', function () {
-    howlerExample.pause();
-  });
-
-  $('#howler-stop').on('click', function () {
-    howlerExample.stop();
-  });
-
-  $('#howler-volup').on('click', function () {
-    var vol = howlerExample.volume();
-    vol += 0.1;
-    if (vol > 1) {
-      vol = 1;
-    }
-    howlerExample.volume(vol);
-  });
-
-  $('#howler-voldown').on('click', function () {
-    var vol = howlerExample.volume();
-    vol -= 0.1;
-    if (vol < 0) {
-      vol = 0;
-    }
-    howlerExample.volume(vol);
-  });
-
-});
-/**/
-
 // //////////
-// Controller
+// Controller, follows the order of the associated HTML elements
 // //////////
+
+// Corresponds to buttons shown on the bottom of the canvas
+
+// Upon pressing the 'q', 'w', 'e' or 'r' the button will be highlighted and the Stroke will be added to the history track
 document.addEventListener('keydown', (event) => {
   const keyName = event.key;
   const buttonName = keyToButton(keyName);
@@ -154,6 +83,7 @@ document.addEventListener('keydown', (event) => {
   }
 }, false);
 
+// Upon releasing the 'q', 'w', 'e' or 'r' the highlighted button will become invisible again
 document.addEventListener('keyup', (event) => {
   const keyName = event.key;
   const buttonName = keyToButton(keyName);
@@ -163,7 +93,7 @@ document.addEventListener('keyup', (event) => {
 }, false);
 
 // Key to button mapping
-// I want to make a Maybe Enumerate of this
+// We would love to wrap this in a Maybe and make the buttons an enumerate. Maybe JavaScript doesn't really fit our coding style
 function keyToButton (keyName) {
   var button = null;
   switch (keyName) {
@@ -176,12 +106,66 @@ function keyToButton (keyName) {
   return button;
 }
 
+// Correspond to the buttons in the horizontal menu
+
+// Currently doesn't do anything. Should reset the time and, if available, play the music of a track
+function playTrack (track) {
+  console.log('now playing: ' + track.name);
+}
+
+// Deletes the current history
+function deleteHistory () {
+  strokeHistory = new Track('History', []);
+  resetTime();
+}
+
+// Adds the current history to the list of all tracks
+function saveHistory () {
+  var newTrackName = document.getElementById('newTrackNameInput').value;
+  var newTrack = new Track(newTrackName, strokeHistory.strokeList);
+  addTrack(newTrack);
+  deleteHistory();
+}
+
+// The handlers for the mp3 file operations, written in jquery using the howler.js library
+$(function () {
+  var howlerExample = new Howl({
+    src: ['ParserAndResult/Alone.mp3'],
+    volume: 0.5
+  });
+  $('#howler-play').on('click', function () {
+    howlerExample.play();
+  });
+  $('#howler-pause').on('click', function () {
+    howlerExample.pause();
+  });
+  $('#howler-stop').on('click', function () {
+    howlerExample.stop();
+  });
+  $('#howler-volup').on('click', function () {
+    var vol = howlerExample.volume();
+    vol += 0.1;
+    if (vol > 1) {
+      vol = 1;
+    }
+    howlerExample.volume(vol);
+  });
+  $('#howler-voldown').on('click', function () {
+    var vol = howlerExample.volume();
+    vol -= 0.1;
+    if (vol < 0) {
+      vol = 0;
+    }
+    howlerExample.volume(vol);
+  });
+});
+
 // //////////
 // View
 // //////////
 
-// First: print functions for our datatypes
-// Note: Overriding toString didn't work :(
+// First: print functions for our datatypes. We use these for debugging/logging
+// Note: Overriding toString within the classes didn't work :(
 
 // Readable string format for a Stroke
 function printStroke (stroke) {
@@ -224,11 +208,13 @@ function printTrack (track) {
   return outputString;
 }
 
-// heighten as much as hardware allows
+// JavaScript concerning the view of the canvas/playfield
+
+// heighten as much as hardware allows. Is never used due to a shortage of time
 var fps = 10;
 var updateTime = (1/fps) * 1000;
 
-// Shows strokes that will come in the next 3 seconds
+// Shows strokes that will come in the next 3 seconds. Currently displays the number of strokes in the whole song
 function showFutureStrokes (track) {
   if (track) {
     for (var i = 0; i < track.strokeList.length; i++) {
@@ -237,13 +223,12 @@ function showFutureStrokes (track) {
   }
 }
 
+// Shows one stroke that will come in the next 3 seconds. Currently displays one stroke indifferent of the time
 function showStroke (stroke) {
   var containerDiv = document.createElement('div');
   // Only render if it's 3000ms ahead
-  // console.log('diff: ' + stroke.time - timeSinceStart);
   if (stroke.time - timeSinceStart() < 3000) {
     var topOffset = 3000 / (stroke.time - timeSinceStart) * 550;
-    console.log('offset: ' + topOffset);
     containerDiv.style['padding-top'] = topOffset;
 
     var strokeDiv = document.createElement('div');
@@ -269,4 +254,25 @@ function buttonToColour (button) {
     }
   }
   return strip;
+}
+
+// JavaScript concerning the view of the horizontal menu
+
+// Generates the dropdown menu containing all playable tracks
+function generateDropdownMenu () {
+  var dropdownContent = document.getElementById('dropdown-content');
+  var oldDropdownList = document.getElementById('dropdownList');
+  if (dropdownContent) {
+    var newDropdownList = document.createElement('ul');
+    newDropdownList.id = 'dropdownList';
+    for (var i = 0; i < tracks.length; i++) {
+      var trackEntry = document.createElement('li');
+      trackEntry.id = 'trackEntry' + i;
+      trackEntry.classList.add('dropdown-content');
+      var text = document.createTextNode(tracks[i].name);
+      trackEntry.appendChild(text);
+      newDropdownList.appendChild(trackEntry);
+    }
+    dropdownContent.replaceChild(newDropdownList, oldDropdownList);
+  }
 }
