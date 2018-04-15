@@ -2,9 +2,9 @@ import codecs
 import re
 import json, io
 
-filenametry = "Alan Walker - Alone (Feerum) [Easy].osu"
+song = "Alan Walker - Alone (Feerum) [Easy].osu"
 
-x_co = []
+# Dictionary of hitobjects
 hit_object_dict = {}
 
 colors = {
@@ -14,13 +14,7 @@ colors = {
     448: 'B'
 }
 
-# General variables
-audio_filename = ""
-audio_lead_in = ""
-preview_time = ""
-countdown = ""
-
-
+# Tries to open the given file
 def open_file(file):
     try:
         file = codecs.open(file, encoding='utf-8')
@@ -29,6 +23,7 @@ def open_file(file):
         print("File doesn't exist")
 
 
+# Looks for the [HitObjects] header in the given file
 def parse(file):
     lines = file.readlines()
     lines = list(map(str.strip, lines))
@@ -43,34 +38,20 @@ def parse(file):
             hitobjects(index, lines)
 
 
+# Saves the hitobjects (values) and their time (keys) to the dictionary
 def hitobjects(index, lines):
     temp = lines[index].split(",")
     value = colors[int((temp[0]))]
-    print("Value: ", value, "\tIndex: ", index)
     key = str(temp[2])
     if not(int(temp[3]) == 128):
         tempd = {}
-        if value not in x_co:
-            x_co.append(value)
-        if value is 271:
-            print(index, " here")
         tempd[key] = value
         hit_object_dict.update(tempd)
 
 
-
-
-
-filename = open_file(filenametry)
+# Executes the total parser, dumping the dictionary in a json file after it's done
+filename = open_file(song)
 if not (filename is None):
-    print("Yay")
     parse(filename)
-    print("Yo")
-    #for k, v in hit_object_dict.items():
-    #    print(k, v)
-    for i in x_co:
-        print(i)
     with io.open('Song.json', 'w', encoding='utf-8') as outfile:
         (json.dump(hit_object_dict, outfile))
-else:
-    print("Boo")

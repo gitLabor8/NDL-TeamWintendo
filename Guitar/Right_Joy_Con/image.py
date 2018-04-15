@@ -46,7 +46,8 @@ for x in range(1175, 1225):
             whitePixelbutton4 += 1
     y = y + 9
 
-#For every button converts the amount of "white" pixels to a 1 for enough white or a 0 for not enough white.
+#For every button: if there are enough white pixels, the button is not pressed and is set to 0. Otherwise,
+#the button is pressed and is set to 1.
 if(whitePixelbutton1 > 60):
     notes["R"] = 0
 else:
@@ -67,11 +68,9 @@ if(whitePixelbutton4 > 60):
 else:
     notes["B"] = 1
 
-#Prints the bits for every button in json.
-print(notes)
-print(json.dumps(whitePixelbutton2))
-print(json.dumps(whitePixelbutton3))
-print(json.dumps(whitePixelbutton4))
+#Writes the button dictionary to a json file that can be read by the javascript node.
+with open('notes.txt', 'w') as outfile:
+	json.dump(notes, outfile)
 
 #Closes the image.
 im.close()
