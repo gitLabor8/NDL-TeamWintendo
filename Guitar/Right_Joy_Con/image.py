@@ -6,6 +6,8 @@ import simplejson as json
 im = Image.open('testimage9.jpg')
 pixelMap = im.load()
 
+notes = {"R" : 0, "Y" : 0, "G" : 0, "B" : 0}
+
 #Creates the counters for the amount of white pixels on the place of the button on the picture.
 whitePixelbutton1 = 0
 whitePixelbutton2 = 0
@@ -46,27 +48,27 @@ for x in range(1175, 1225):
 
 #For every button converts the amount of "white" pixels to a 1 for enough white or a 0 for not enough white.
 if(whitePixelbutton1 > 60):
-    whitePixelbutton1 = 0
+    notes["R"] = 0
 else:
-    whitePixelbutton1 = 1
+    notes["R"] = 1
     
 if(whitePixelbutton2 > 60):
-    whitePixelbutton2 = 0
+    notes["Y"] = 0
 else:
-    whitePixelbutton2 = 1
+    notes["Y"] = 1
     
 if(whitePixelbutton3 > 60):
-    whitePixelbutton3 = 0
+    notes["G"] = 0
 else:
-    whitePixelbutton3 = 1
+    notes["G"] = 1
     
 if(whitePixelbutton4 > 60):
-    whitePixelbutton4 = 0
+    notes["B"] = 0
 else:
-    whitePixelbutton4 = 1
+    notes["B"] = 1
 
 #Prints the bits for every button in json.
-print(json.dumps(whitePixelbutton1))
+print(notes)
 print(json.dumps(whitePixelbutton2))
 print(json.dumps(whitePixelbutton3))
 print(json.dumps(whitePixelbutton4))

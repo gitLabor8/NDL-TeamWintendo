@@ -19,6 +19,8 @@
   <div id="canvas" class="canvas">
     <div id="playField" class="playfield">
       <div id="redStrip" class="strokeStrip"></div>
+      <div id="yellowStrip" class="strokeStrip"></div>
+      <div id="greenStrip" class="strokeStrip"></div>
       <div id="blueStrip" class="strokeStrip"></div>
     </div>
     <ul id="btnRow" class="btnrow">
@@ -45,6 +47,14 @@
       <input id="newTrackNameInput" type="text" value="Save 1">
     </li>
     <li><button onClick="deleteHistory()" class="button">Restart recording</button></li>
-    <li><button onClick="showFutureStrokes(testTrack)" class="button">Test</button></li>
+    <li><button onClick="showFutureStrokes(tracks[2])" class="button">Test</button></li>
+
+    <!-- Playing Music !-->
+    <script src="howler.js"></script>
+    <li><button id='howler-play' class="button">Play</button></li>
+    <li><button id='howler-pause' class="button">Pause</button></li>
+    <li><button id='howler-stop' class="button">Stop</button></li>
+    <li><button id='howler-volup' class="button">Vol+</button></li>
+    <li><button id='howler-voldown' class="button">Vol-</button></li>
   </ul>
 </body>

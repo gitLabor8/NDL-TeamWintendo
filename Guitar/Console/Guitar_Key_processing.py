@@ -22,7 +22,7 @@ while True:
             camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
 
             #Opens the picture that was taken and makes a pixelmap of it.
-            im = Image.open('The_Image.jpg')
+            im = Image.open('/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg')
             pixelMap = im.load()
 
             #Creates the counters for the amount of white pixels on the place of the button on the picture.
@@ -85,7 +85,7 @@ while True:
                 notes["B"] = 1
                        
             #Prints the bits for every button in a json file.
-            with open('notes.json', 'w') as file:
+            with open('Website/notes.json', 'w') as file:
                 json.dump(notes, file)
             
             #Closes the image.

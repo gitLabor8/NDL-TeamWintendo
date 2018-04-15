@@ -99,7 +99,7 @@ function saveHistory () {
   deleteHistory();
 }
 
-/*
+
 // Janneau code
 $(function () {
 

@@ -22,9 +22,11 @@ app.get('/', function (req, res) {
   res.render('guitar', {data: data});
 });
 
-app.use(express.static(path.join(__dirname, 'Views')));
+console.log(path.join(__dirname, 'views'));
 
-app.listen(8080);
+app.use(express.static(path.join(__dirname, 'views')));
+
+app.listen(3000);
 
 console.log('Initial File content : ' + file);
 
