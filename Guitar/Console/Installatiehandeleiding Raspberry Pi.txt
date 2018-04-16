@@ -1,0 +1,5 @@
+- Je wil een image writing tool zoals Etcher
+- Unpack 2018-03-13-raspbian-stretch.zip die hier gevonden kan worden: https://downloads.raspberrypi.org/raspbian_latest
+- Open de image writing tool en write de 2018-03-13-raspbian-stretch.img image naar een SD card
+- Plug the SD card in de Raspbarry pi
+- De NDL-TeamWintendo.zip moet uitgepakt worden op de desktop van de Raspberry Pi.
