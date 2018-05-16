@@ -74,7 +74,7 @@
  */
 
 .horizontalMenu {
-  position: relative;
+  position: absolute;
   list-style-type: none;
   height: 100px;
   width: 600px;
@@ -112,7 +112,6 @@
 /* Dropdown Content, by default hidden */
 .dropdown-content {
    display: none;
-   position: absolute;
    background-color: #f1f1f1;
    min-width: 260px;
    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
