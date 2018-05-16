@@ -1,2 +1,5 @@
 # We don't want the buffers to sync
 *.jpg
+
+# Ignore the php webstorm files
+Guitar/Console/Website/.idea/*
