@@ -64,7 +64,7 @@ function addTrack (track) {
 }
 
 // List of all user key strokes sorted on timeSinceStart
-var strokeHistory = new Track('History', []);
+var strokeRecording = new Track('Recording', []);
 
 // //////////
 // Controller, follows the order of the associated HTML elements
@@ -72,14 +72,14 @@ var strokeHistory = new Track('History', []);
 
 // Corresponds to buttons shown on the bottom of the canvas
 
-// Upon pressing the 'q', 'w', 'e' or 'r' the button will be highlighted and the Stroke will be added to the history track
+// Upon pressing the 'q', 'w', 'e' or 'r' the button will be highlighted and the Stroke will be added to the Recording track
 document.addEventListener('keydown', (event) => {
   const keyName = event.key;
   const buttonName = keyToButton(keyName);
   const stroke = new Stroke(buttonName);
   if (buttonName != null) {
     document.getElementById(buttonName).style.visibility = 'visible';
-    addStroke(strokeHistory, stroke);
+    addStroke(strokeRecording, stroke);
   }
 }, false);
 
@@ -113,18 +113,19 @@ function playTrack (track) {
   console.log('now playing: ' + track.name);
 }
 
-// Deletes the current history
-function deleteHistory () {
-  strokeHistory = new Track('History', []);
+// Deletes the current recording
+function deleteRecording () {
+  strokeRecording = new Track('Recording', []);
   resetTime();
 }
 
-// Adds the current history to the list of all tracks
-function saveHistory () {
+// Adds the current Recording to the list of all tracks
+function saveRecording () {
   var newTrackName = document.getElementById('newTrackNameInput').value;
-  var newTrack = new Track(newTrackName, strokeHistory.strokeList);
+  var newTrack = new Track(newTrackName, strokeRecording.strokeList);
+  console.log("New track added: " + printTrack(newTrack));
   addTrack(newTrack);
-  deleteHistory();
+  deleteRecording();
 }
 
 // The handlers for the mp3 file operations, written in jquery using the howler.js library
