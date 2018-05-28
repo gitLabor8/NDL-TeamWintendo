@@ -19,9 +19,9 @@ buttonResults = []
 
 #Continues while loop to check if we get input form the Arduino and if a picture must then be taken.
 while True:
-        #Checks if the arduino sends the signal to take a picture, if so takes a picture and saves it.
-	if(int (ser.readline().rstrip()) == 1):
-	break
+    #Checks if the arduino sends the signal to take a picture, if so takes a picture and saves it.
+    if(int (ser.readline().rstrip()) == 1):
+        break
 
 camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
 
@@ -52,20 +52,20 @@ mask = np.zeros(thresh.shape, dtype="uint8")
  
 # loop over the unique components
 for label in np.unique(labels):
-	# if this is the background label, ignore it
-	if label == 0:
-	continue
+    # if this is the background label, ignore it
+    if label == 0:
+        continue
  
-	# otherwise, construct the label mask and count the
-	# number of pixels 
-	labelMask = np.zeros(thresh.shape, dtype="uint8")
-	labelMask[labels == label] = 255
-	numPixels = cv2.countNonZero(labelMask)
+    # otherwise, construct the label mask and count the
+    # number of pixels
+    labelMask = np.zeros(thresh.shape, dtype="uint8")
+    labelMask[labels == label] = 255
+    numPixels = cv2.countNonZero(labelMask)
  
-	# if the number of pixels in the component is sufficiently
-	# large, then add it to our mask of "large blobs"
-	if numPixels > 300:
-		mask = cv2.add(mask, labelMask)
+    # if the number of pixels in the component is sufficiently
+    # large, then add it to our mask of "large blobs"
+    if numPixels > 300:
+        mask = cv2.add(mask, labelMask)
 
 # find the contours in the mask, then sort them from left to
 # right
@@ -76,32 +76,42 @@ cnts = contours.sort_contours(cnts)[0]
 
 # loop over the contours
 for c in enumerate(cnts):
-	# draw the bright spot on the image
-	(x, y, w, h) = cv2.boundingRect(c)
-	((cX, cY), radius) = cv2.minEnclosingCircle(c)
-	buttonAreas.append([cX,cY, radius])
+    # draw the bright spot on the image
+    (x, y, w, h) = cv2.boundingRect(c)
+    ((cX, cY), radius) = cv2.minEnclosingCircle(c)
+    buttonAreas.append([cX, cX * radius, cY, cY * radius])
 
 while True:
-	if(int (ser.readline().rstrip()) == 1):
-		camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
+    if(int (ser.readline().rstrip()) == 1):
+        camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
 	
-	# load the image, convert it to grayscale, and blur it
-	image = cv2.imread(args["/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg"])
-	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-	blurred = cv2.GaussianBlur(gray, (11, 11), 0)
+    # load the image, convert it to grayscale, and blur it
+    image = cv2.imread(args["/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg"])
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (11, 11), 0)
 
-	# threshold the image to reveal light regions in the
-	# blurred image
-	thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
+    # threshold the image to reveal light regions in the
+    # blurred image
+    thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
 
 
-	for c in enumerate(buttonAreas):
-		for x in range(75, 125):
-                	for y in range(375, 425):
-                    	r, g, b = pixelMap[x,y]
-                    	if r > 180 and g > 180 and b > 180:
-                     		whitePixelbutton4 += 1
-                	y = y + 4 
+    for c in enumerate(buttonAreas):
+        whitepixel = 0
+        blackpixel = 0
+        for x in range(buttonAreas[c][0], buttonAreas[c][1]):
+            for y in range(buttonAreas[c][2], buttonAreas[c][3]):
+                imVal = image.at<uchar>(Point(x, y))
+                if imVal == 255:
+                    whitepixel += 1
+                else:
+                    blackpixel += 1
+        if whitepixel > (2*blackpixel):
+            buttonResults[c] = 0
+        else:
+            buttonResults[c] = 1
+
+
+
 
 
 
