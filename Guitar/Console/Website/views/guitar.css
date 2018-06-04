@@ -138,5 +138,5 @@
 }
 /* Fancy on-hover background shader */
 .dropdown-content li:hover {
-  background-color: #ddd;
+  background-color: lightgray;
 }

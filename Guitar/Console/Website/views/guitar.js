@@ -5,6 +5,9 @@
 // Time normalisation
 var startingTime = timeInit();
 
+// Move the song three seconds to the future, to give the first notes time to
+var visualDelay = 3000;
+
 function timeInit () {
   var d = new Date();
   return d.getTime();
@@ -24,7 +27,7 @@ function timeSinceStart () {
 class Stroke {
   constructor (buttonName) {
     this.button = buttonName;
-    this.time = timeSinceStart();
+    this.time = timeSinceStart() + visualDelay;
   }
 }
 
@@ -211,35 +214,33 @@ function printTrack (track) {
 
 // JavaScript concerning the view of the canvas/playfield
 
-// heighten as much as hardware allows. Is never used due to a shortage of time
-var fps = 10;
-var updateTime = (1/fps) * 1000;
-
 // Shows strokes that will come in the next 3 seconds. Currently displays the number of strokes in the whole song
 function showFutureStrokes (track) {
+  console.log("showFutureStrokes: " + timeSinceStart());
   if (track) {
+    console.log(printTrack(track));
     for (var i = 0; i < track.strokeList.length; i++) {
-      showStroke(track.strokeList[i]);
+      var stroke = track.strokeList[i];
+
+      // Only render if it's 3000ms ahead
+      var delayTime = stroke.time - timeSinceStart() - visualDelay;
+      console.log(delayTime);
+      setTimeout(showStroke(stroke), delayTime);
     }
+    console.log("Finished rendering " + track.name);
   }
 }
 
-// Shows one stroke that will come in the next 3 seconds. Currently displays one stroke indifferent of the time
-function showStroke (stroke) {
-  var containerDiv = document.createElement('div');
-  // Only render if it's 3000ms ahead
-  if (stroke.time - timeSinceStart() < 3000) {
-    var topOffset = 3000 / (stroke.time - timeSinceStart) * 550;
-    containerDiv.style['padding-top'] = topOffset;
-
-    var strokeDiv = document.createElement('div');
-    var colour = buttonToColour(stroke.button);
-    strokeDiv.classList.add(colour);
-    strokeDiv.classList.add('strokeToCome');
-    var strip = document.getElementById(colour + 'Strip');
-    containerDiv.appendChild(strokeDiv);
-    strip.appendChild(containerDiv);
-  }
+// Shows one stroke
+function showStroke (stroke){
+  var strokeDiv = document.createElement('div');
+  var colour = buttonToColour(stroke.button);
+  strokeDiv.classList.add(colour);
+  strokeDiv.classList.add('strokeToCome');
+  var strip = document.getElementById(colour + 'Strip');
+  strip.appendChild(strokeDiv);
+  $(strokeDiv).animate({top: '+=580px'}, visualDelay);
+  setTimeout(function(){ strip.removeChild(strokeDiv);}, visualDelay);
 }
 
 // Returns the CSS class of the strip that the given stroke belongs to
@@ -267,10 +268,12 @@ function generateDropdownMenu () {
     var newDropdownList = document.createElement('ul');
     newDropdownList.id = 'dropdownList';
     for (var i = 0; i < tracks.length; i++) {
+      var track = tracks[i];
       var trackEntry = document.createElement('li');
       trackEntry.id = 'trackEntry' + i;
       trackEntry.classList.add('dropdown-content');
-      var text = document.createTextNode(tracks[i].name);
+      trackEntry.addEventListener("click", function () {setTimeout(function(){resetTime(); showFutureStrokes(track);}, visualDelay)});
+      var text = document.createTextNode(track.name);
       trackEntry.appendChild(text);
       newDropdownList.appendChild(trackEntry);
     }
