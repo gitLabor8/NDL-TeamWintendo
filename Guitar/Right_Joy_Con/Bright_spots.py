@@ -1,12 +1,13 @@
+#!/usr/bin/python2.7
 import serial
 import picamera
 from imutils import contours
-from skimage import measure
+import skimage #import measure
 import numpy as np
 import argparse
 import imutils
 import cv2
-
+ 
 #Opens the camera module and sets the resolution on the Rpi so it can be used to take pictures.
 camera = picamera.PiCamera()
 camera.resolution = (1280, 720)
