@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 import serial
 import picamera
-from imutils import contours
+#from imutils import contours
 import skimage #import measure
 import numpy as np
 import argparse
