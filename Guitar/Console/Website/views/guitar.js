@@ -23,11 +23,18 @@ function timeSinceStart () {
   return (time - startingTime);
 }
 
+// Show the time in the HTML menu
+function updateClock () {
+  document.getElementById("time").innerHTML = timeSinceStart();
+}
+setInterval(updateClock, 50);
+
 // Our first datatype: a button-time pair
 class Stroke {
   constructor (buttonName) {
     this.button = buttonName;
-    this.time = timeSinceStart() + visualDelay;
+    this.time = timeSinceStart();
+    scoreCheck(buttonName, timeSinceStart());
   }
 }
 
@@ -68,6 +75,30 @@ function addTrack (track) {
 
 // List of all user key strokes sorted on timeSinceStart
 var strokeRecording = new Track('Recording', []);
+
+// The track that is being played right now
+var currentTrack;
+
+// The player score: how many strokes did he hit correctly?
+var score = 0;
+
+// Show the time in the HTML menu
+function updateScore () {
+  document.getElementById("score").innerHTML = score;
+}
+setInterval(updateScore, 50);
+
+function scoreCheck (button, time) {
+  var checked = false;
+  for (let stroke of currentTrack.strokeList) {
+    if(checked){
+      break;
+    }
+    if(stroke.button == button && stroke.time - time < 500) {
+      score = score + 1;
+    }
+  }
+}
 
 // //////////
 // Controller, follows the order of the associated HTML elements
@@ -110,11 +141,6 @@ function keyToButton (keyName) {
 }
 
 // Correspond to the buttons in the horizontal menu
-
-// Currently doesn't do anything. Should reset the time and, if available, play the music of a track
-function playTrack (track) {
-  console.log('now playing: ' + track.name);
-}
 
 // Deletes the current recording
 function deleteRecording () {
@@ -214,18 +240,15 @@ function printTrack (track) {
 
 // JavaScript concerning the view of the canvas/playfield
 
-// Shows strokes that will come in the next 3 seconds. Currently displays the number of strokes in the whole song
+// Shows orderd list of strokes that will come in the next 3 seconds
 function showFutureStrokes (track) {
-  console.log("showFutureStrokes: " + timeSinceStart());
+  console.log("showFutureStrokes: " + printTrack(track) + timeSinceStart());
   if (track) {
-    console.log(printTrack(track));
     for (var i = 0; i < track.strokeList.length; i++) {
       var stroke = track.strokeList[i];
-
-      // Only render if it's 3000ms ahead
-      var delayTime = stroke.time - timeSinceStart() - visualDelay;
+      var delayTime = stroke.time;
       console.log(delayTime);
-      setTimeout(showStroke(stroke), delayTime);
+      setTimeout(function(){showStroke(stroke)}, delayTime);
     }
     console.log("Finished rendering " + track.name);
   }
@@ -272,7 +295,7 @@ function generateDropdownMenu () {
       var trackEntry = document.createElement('li');
       trackEntry.id = 'trackEntry' + i;
       trackEntry.classList.add('dropdown-content');
-      trackEntry.addEventListener("click", function () {setTimeout(function(){resetTime(); showFutureStrokes(track);}, visualDelay)});
+      trackEntry.addEventListener("click", function () {setTimeout(function(){currentTrack = track; resetTime(); showFutureStrokes(track);}, visualDelay)});
       var text = document.createTextNode(track.name);
       trackEntry.appendChild(text);
       newDropdownList.appendChild(trackEntry);

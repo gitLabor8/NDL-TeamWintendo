@@ -21,7 +21,7 @@
 .strokeStrip {
   width: 136px;
   height: 600px;
-  margin: 6px;
+  margin: 0px;
   padding-left: 0px;
   position: relative;
   display: inline-block;
@@ -33,7 +33,7 @@
   border: 1px solid black;
   width: 136px;
   height: 20px;
-  margin: 6px;
+  margin: 0px;
   display: inline-block;
   float: left;
 }
@@ -52,7 +52,7 @@
   border: 1px solid black;
   height: 20px;
   width: 136px;
-  margin: 6px;
+  margin: 0px;
   display: inline-block;
   float: left;
 }
