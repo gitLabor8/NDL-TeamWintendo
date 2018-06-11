@@ -5,6 +5,32 @@
   <link rel="stylesheet" type="text/css" href="guitar.css">
   <script type="text/javascript" src="jquery.min.js"></script>
   <script src="guitar.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    $(function () {
+      var socket = io();
+      socket.on('server-message', function(message) {
+        //console.log(message);
+        var notes = message;
+        console.log(notes);
+        socket.emit('message', 'hello socket.io from browser');
+        button1 = notes[0];
+        console.log(button1);
+        button2 = notes[1];
+        console.log(button2);
+        button3 = notes[2];
+        button4 = notes[3];
+        if(button1 == "1"){
+          console.log(button1);
+          //addStroke("redButton");
+          document.getElementById("redButton").style.visibility = 'visible';
+        }
+        if(button1 == "0"){
+          document.getElementById("redButton").style.visibility = 'hidden';
+        }
+      });
+    });
+  </script>
 
   <!-- Loading in the modal.
   Warning: scripts need to be run on server, otherwise Chrome raises security issues. Use Firefox for local testing !-->
@@ -13,8 +39,6 @@
     $("#historyModal").load("guitarDebugModal.html");
   });
   </script>
-
-  <script> var hey = "<%= tuple %>";</script>
 </head>
 
 <body onLoad="generateDropdownMenu()">
