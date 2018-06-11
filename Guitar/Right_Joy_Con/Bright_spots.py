@@ -1,44 +1,42 @@
-#!/usr/bin/python2.7
-import serial
-import picamera
-#from imutils import contours
-import skimage #import measure
+#import serial
+#import picamera
+from imutils import contours
+from skimage import measure
 import numpy as np
 import argparse
 import imutils
 import cv2
- 
+
 #Opens the camera module and sets the resolution on the Rpi so it can be used to take pictures.
-camera = picamera.PiCamera()
-camera.resolution = (1280, 720)
+#camera = picamera.PiCamera()
+#camera.resolution = (1280, 720)
 
 #Opens the serial port where the Arduino is hooked up to, so it can be read.
-ser = serial.Serial("/dev/ttyUSB0", 9600)
+#ser = serial.Serial("/dev/ttyUSB0", 9600)
 
 buttonAreas = []
 buttonResults = []
 
 #Continues while loop to check if we get input form the Arduino and if a picture must then be taken.
-while True:
+#while True:
     #Checks if the arduino sends the signal to take a picture, if so takes a picture and saves it.
-    if(int (ser.readline().rstrip()) == 1):
-        break
+    #if(int (ser.readline().rstrip()) == 1):
+        #break
 
-camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
+#camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
-                            help="path to the image file")
-args = vars(ap.parse_args())
+#ap = argparse.ArgumentParser()
+#ap.add_argument("-i", "--image", required=True,
+	#help="path to the image file")
+#args = vars(ap.parse_args()
 
 # load the image, convert it to grayscale, and blur it
-img = cv2.imread(args["/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg"])
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-blurred = cv2.GaussianBlur(gray, (11, 11), 0)
+img = cv2.imread("C:/Users/Janneau/Pictures/Untitled.png",0)
+blurred = cv2.GaussianBlur(img, (11, 11), 0)
 
 # threshold the image to reveal light regions in the
 # blurred image
-thresh = cv2.threshold(blurred, 180, 255, cv2.THRESH_BINARY)[1]
+thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
 
 # perform a series of erosions and dilations to remove
 # any small blobs of noise from the thresholded image
@@ -76,41 +74,41 @@ cnts = cnts[0] if imutils.is_cv2() else cnts[1]
 cnts = contours.sort_contours(cnts)[0]
 
 # loop over the contours
-for c in enumerate(cnts):
+for (i,c) in enumerate(cnts):
     # draw the bright spot on the image
-    (x, y, w, h) = cv2.boundingRect(c)
-    ((cX, cY), radius) = cv2.minEnclosingCircle(c)
-    buttonAreas.append([cX, cX * radius, cY, cY * radius])
+    x,y,w,h = cv2.boundingRect(c)
+    buttonAreas.append([x, w, y, h])
+    print x,y,w,h
 
 while True:
-    if(int (ser.readline().rstrip()) == 1):
-        camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
-	
-    # load the image, convert it to grayscale, and blur it
-    image = cv2.imread(args["/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg"])
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    blurred = cv2.GaussianBlur(gray, (11, 11), 0)
+    if(True):#int (ser.readline().rstrip()) == 1):
+        #camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
 
-    # threshold the image to reveal light regions in the
-    # blurred image
-    thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
+        # load the image, convert it to grayscale, and blur it
+        image = cv2.imread("C:/Users/Janneau/Pictures/Untitled.png",0)
+        blurred = cv2.GaussianBlur(image, (11, 11), 0)
 
+        # threshold the image to reveal light regions in the
+        # blurred image
+        thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
+        height, width = img.shape
+    
+        for (i,c) in enumerate(buttonAreas):
+            whitepixel = 0
+            blackpixel = 0
+            for x in range(buttonAreas[i][0], buttonAreas[i][1]):
+                for y in range(buttonAreas[i][2], buttonAreas[i][3]):
+                    imVal = thresh[x, y]
+                    if imVal == 255:
+                        whitepixel += 1
+                    else:
+                        blackpixel += 1
+            if whitepixel > (2*blackpixel):
+                buttonResults.append(0)
+            else:
+                buttonResults.append(1)
 
-    for c in enumerate(buttonAreas):
-        whitepixel = 0
-        blackpixel = 0
-        for x in range(buttonAreas[c][0], buttonAreas[c][1]):
-            for y in range(buttonAreas[c][2], buttonAreas[c][3]):
-                imVal = image.at<uchar>(Point(x, y))
-                if imVal == 255:
-                    whitepixel += 1
-                else:
-                    blackpixel += 1
-        if whitepixel > (2*blackpixel):
-            buttonResults[c] = 0
-        else:
-            buttonResults[c] = 1
-
+        break
 
 
 
