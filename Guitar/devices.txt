@@ -1,0 +1,5 @@
+We gebruiken:
+- Raspberry pi 1:
+	Installatiehandleiding in het mapje Raspberry Pi.
+- Arduino Uno in release 3, R3:
+	Installatiehandleiding in het mapje Arduino.

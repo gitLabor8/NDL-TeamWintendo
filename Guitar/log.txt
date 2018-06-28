@@ -1,0 +1,80 @@
+# Intern document dat als basis kan dienen voor ons verslag
+ma 5 feb: Eerste meeting
+Hoorcollege + Arduino opdracht
+Nin: Eerste mail naar Nintendo om een dev kit aan te vragen
+
+vr 9 feb: Arduino
+Arduino opdracht afgewerkt
+Nin: Respons: ze vragen naar concepten
+
+ma 12 feb: Carnaval
+\
+
+vr 16 feb: Proposals
+Presentatie voorstellen. Daarna overlegd met docenten.
+Trompet + Guitar concept verzonnen
+
+ma 19 feb:
+Plant & Cooking concept verzonnen
+Begonnen met Guitar uitwerken
+Rpi geflasht om als right joy con te functioneren
+Nin: Sent: Technische tekeningen Guitar, Plant en Cooking concepts to Nintendo
+
+vr 23 feb:
+Rpi connectie via ssh/vnc (and reinstalled)
+
+ma 26 feb:
+Rpi maakt continuous foto's (voor witte stip detectie)
+Gestart met Arduino om te functioneren als left joy con
+Nin: Respons: We don't have protocols for this yet and won't in the near future. Do you want Switch or LABO dev kit?
+
+vr 2 mar:
+Git strak geordend, bufferfolders
+Besloten geen bluetooth voor filesharing tussen console en right JC
+Filesharing opgezet, nog niet werkend
+left JC parseert input correct. Gaat via BT doorgeven. BT nog niet geimplementeerd
+Nin: Sent: We willen Switch, want LABO heeft te veel API's, terwijl we die juist moeten schrijven voor het vak 
+
+ma 5 mar:
+BT en shared folder doen
+Karton
+
+vr 9 mar:
+Router problems
+Presentation built
+Added test blink Arduino
+Nin: They gave up on us.
+
+ma 12 mar:
+Mid-term presentations
+Revising plan: no cooking/plant
+More software, web app, Flask, something educational
+
+vr 16 mar:
+Cried. Setup Flask environment, then deleted it over HTML5
+Skipped Arduino bluetooth connection. Now we succesfully use USB-serial cable.
+Python script made for reading serial input
+HTML5 shady framework for reading serial input
+
+Requirements:
+- Guitar, four snares, one mash button
+ + Arduino: meuk
+ + Pi: meuk
+ + Interactie: meuk
+- Webapp on Pi, reachable through VNC
+ + Using HTML5
+ + Show given input
+ + Hardcode some 'songs'
+ + Replay songs with guitar -> score
+
+- We quit the other two concepts
+
+ma 19 mar:
+Skipped due to illness, construction at home and other reasons
+
+vr 23 mar:
+Started HTML5 framework: responsive buttons reacting on local keyboard presses
+Multiple attempts to create a NAT on the Rpi (to connect with the locally hosted web app). Attempt through using Rpi as hotspot
+
+TODO: 
+Investigate possibility bitmap-JavaScript

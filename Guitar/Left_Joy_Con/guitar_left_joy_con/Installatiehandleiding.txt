@@ -1,0 +1,3 @@
+Je wil de Arduino 1.8.5 IDE installeren, dit kan gevonden worden op: https://www.arduino.cc/en/Main/Software
+
+Dan wil je de guitar_left_joy_con.ino, die je in deze map kan vinden, uploaden naar de Arduino.
