@@ -4,8 +4,8 @@ var http = require("http").Server(app);
 var path = require('path');
 
 app.set('view engine', 'ejs');
-app.get('/', function (req, res) {
-  res.render('guitar');
+app.get('/', function(req, res) {
+	res.render('guitar');
 });
 
 app.use(express.static(path.join(__dirname, 'views')));
@@ -13,17 +13,18 @@ app.use(express.static(path.join(__dirname, 'views')));
 var tuple = '';
 var io = require("socket.io")(http);
 
-io.on('connection', function (socket) {
-  console.log('a user connected');
-  io.emit('server-message', 'hello, server');
+io.on('connection', function(socket) {
+	console.log('a user connected');
+	io.emit('server-message', 'hello, server');
 
-  socket.on('python-message', function(fromPython) {
-    io.emit('server-message', fromPython);
-  })
+	socket.on('python-message', function(fromPython) {
+		console.log("fromPython" + fromPython)
+		io.emit('server-message', fromPython);
+	})
 
-  socket.on('message', function(message) {
-    console.log(message);
-  })
+	socket.on('message', function(message) {
+		console.log(message);
+	})
 });
 http.listen(3000);
 
