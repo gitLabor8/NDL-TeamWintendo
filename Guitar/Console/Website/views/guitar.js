@@ -34,7 +34,7 @@ class Stroke {
   constructor (buttonName) {
     this.button = buttonName;
     this.time = timeSinceStart();
-    scoreCheck(buttonName, timeSinceStart());
+    //scoreCheck(buttonName, timeSinceStart());
   }
 }
 
