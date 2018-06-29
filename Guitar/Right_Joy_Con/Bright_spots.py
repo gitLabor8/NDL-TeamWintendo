@@ -1,42 +1,38 @@
-#import serial
-#import picamera
+#!/usr/bin/python2.7
+import serial
+import picamera
 from imutils import contours
 from skimage import measure
 import numpy as np
 import argparse
 import imutils
 import cv2
-
+ 
 #Opens the camera module and sets the resolution on the Rpi so it can be used to take pictures.
-#camera = picamera.PiCamera()
-#camera.resolution = (1280, 720)
+camera = picamera.PiCamera()
+camera.resolution = (1280, 720)
 
 #Opens the serial port where the Arduino is hooked up to, so it can be read.
-#ser = serial.Serial("/dev/ttyUSB0", 9600)
+ser = serial.Serial("/dev/ttyUSB0", 9600)
 
 buttonAreas = []
 buttonResults = []
 
 #Continues while loop to check if we get input form the Arduino and if a picture must then be taken.
-#while True:
+while True:
     #Checks if the arduino sends the signal to take a picture, if so takes a picture and saves it.
-    #if(int (ser.readline().rstrip()) == 1):
-        #break
+    if(int (ser.readline().rstrip()) == 1):
+        break
 
-#camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
-
-#ap = argparse.ArgumentParser()
-#ap.add_argument("-i", "--image", required=True,
-	#help="path to the image file")
-#args = vars(ap.parse_args()
+camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
 
 # load the image, convert it to grayscale, and blur it
-img = cv2.imread("C:/Users/Janneau/Pictures/Untitled.png",0)
+img = cv2.imread("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg",0)
 blurred = cv2.GaussianBlur(img, (11, 11), 0)
 
 # threshold the image to reveal light regions in the
 # blurred image
-thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
+thresh = cv2.threshold(blurred, 180, 255, cv2.THRESH_BINARY)[1]
 
 # perform a series of erosions and dilations to remove
 # any small blobs of noise from the thresholded image
@@ -78,26 +74,27 @@ for (i,c) in enumerate(cnts):
     # draw the bright spot on the image
     x,y,w,h = cv2.boundingRect(c)
     buttonAreas.append([x, w, y, h])
-    print x,y,w,h
+
+print "ready"
 
 while True:
-    if(True):#int (ser.readline().rstrip()) == 1):
-        #camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
-
+    if(int (ser.readline().rstrip()) == 1):
+        camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
+	
         # load the image, convert it to grayscale, and blur it
-        image = cv2.imread("C:/Users/Janneau/Pictures/Untitled.png",0)
+        image = cv2.imread("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg",0)
         blurred = cv2.GaussianBlur(image, (11, 11), 0)
 
         # threshold the image to reveal light regions in the
         # blurred image
         thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
         height, width = img.shape
-    
+
         for (i,c) in enumerate(buttonAreas):
             whitepixel = 0
             blackpixel = 0
-            for x in range(buttonAreas[i][0], buttonAreas[i][1]):
-                for y in range(buttonAreas[i][2], buttonAreas[i][3]):
+            for x in range(int(buttonAreas[i][0]), int(buttonAreas[i][1]) + 1):
+                for y in range(int(buttonAreas[i][2]), int(buttonAreas[i][3]) + 1):
                     imVal = thresh[x, y]
                     if imVal == 255:
                         whitepixel += 1
@@ -107,8 +104,11 @@ while True:
                 buttonResults.append(0)
             else:
                 buttonResults.append(1)
-
-        break
+                
+        print buttonResults
+        buttonResults = []
+                
+camera.close()
 
 
 
