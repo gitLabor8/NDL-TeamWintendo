@@ -10,8 +10,11 @@ app.get('/', function(req, res) {
 
 app.use(express.static(path.join(__dirname, 'views')));
 
-var tuple = '';
-var io = require("socket.io")(http);
+var tuple = ""
+var app = require('express')();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+//var io = require("./node_modules/socket.io")(http);
 
 io.on('connection', function(socket) {
 	console.log('a user connected');

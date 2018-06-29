@@ -1,5 +1,9 @@
 from datetime import datetime
-from socketIO_client import SocketIO, LoggingNamespace # socket.io@1.7.2
+from socketIO_client import SocketIO, LoggingNamespace
+
+# Note:
+# socket.io *must* be version 1.7.2. Explicitly check this with pip!
+
 import sys
 
 while True:
@@ -10,6 +14,21 @@ while True:
             socketIO.wait(seconds=1)
             buttons = (0, 0, 0, 0)
             socketIO.emit('python-message', buttons)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             socketIO.wait(seconds=1)
         except ConnectionError as ce:
             print("ConnectionError")
