@@ -7,3 +7,6 @@
 
 # Exclude Node.js files
 node_modules/
+
+# No compressed files
+*.zip
