@@ -117,11 +117,9 @@ function inputChooser(){
 	}
 	// The user wants to use the IO input
 	if(document.getElementById("inputChoice").checked){
-		console.log("choose socket io");
 		socket.open();
 		socketIOinput(socket);
 	} else {
-		console.log("choose keyboard");
 		socket.close();
 	}
 }
@@ -134,7 +132,6 @@ document.addEventListener("keydown", event => {
         const buttonName = keyToButton(keyName);
         const stroke = new Stroke(buttonName);
         if (buttonName != null) {
-            console.log("In event handler");
             document.getElementById(buttonName).style.visibility = "visible";
             addStroke(strokeRecording, stroke);
         }
@@ -171,9 +168,6 @@ function keyToButton(keyName) {
 			break;
 		default:
 			break;
-	}
-	if(button === null){
-		console.log("Tried to make button, but incorrect key was hit");
 	}
 	return button;
 }
@@ -308,17 +302,17 @@ function printTrack(track) {
 
 // JavaScript concerning the view of the canvas/playfield
 
-// Shows orderd list of strokes that will come in the next 3 seconds
+// Shows ordered list of strokes that will come in the next 3 seconds
 function showFutureStrokes(track) {
 	console.log("showFutureStrokes: " + printTrack(track) + timeSinceStart());
 	if (track) {
 		for (var i = 0; i < track.strokeList.length; i++) {
-			var stroke = track.strokeList[i];
-			var delayTime = stroke.time;
-			console.log(delayTime);
+			var delayTime = track.strokeList[i].time;
+			//console.log("delayTime " + delayTime + " colour: " + track.strokeList[i].button);
 			setTimeout(function() {
-				showStroke(stroke);
-			}, delayTime);
+				console.log("sending " + track.strokeList[i].button);
+                showStroke(track.strokeList[i]).bind(track)
+            }, delayTime);
 		}
 		console.log("Finished rendering " + track.name);
 	}
@@ -329,6 +323,7 @@ function showStroke(stroke) {
 	var strokeDiv = document.createElement("div");
 	var colour = buttonToColour(stroke.button);
 	strokeDiv.classList.add(colour);
+	console.log("colour" + stroke.button);
 	strokeDiv.classList.add("strokeToCome");
 	var strip = document.getElementById(colour + "Strip");
 	strip.appendChild(strokeDiv);
