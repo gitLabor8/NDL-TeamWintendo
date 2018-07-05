@@ -146,6 +146,9 @@ function keyToButton(keyName) {
 		default:
 			break;
 	}
+	if(button = null){
+		console.log("Tried to make button, but incorrect key was hit");
+	}
 	return button;
 }
 
