@@ -104,39 +104,52 @@ function scoreCheck(button, time) {
 // Controller, follows the order of the associated HTML elements
 // //////
 
+
+// The socket that we use to receive server input
+var firstTime = true;
+var socket = null;
+
 // Chooses between socket IO input and keyboard input
 function inputChooser(){
-    var socket = io();
-    // The user wants to use the IO input
+	if(firstTime){
+        socket = io();
+		firstTime = false;
+	}
+	// The user wants to use the IO input
 	if(document.getElementById("inputChoice").checked){
 		console.log("choose socket io");
+		socket.open();
 		socketIOinput(socket);
-        //$('*').off('keyup keydown');
-    } else {
+	} else {
 		console.log("choose keyboard");
-		socket.disable("server-message");
+		socket.close();
 	}
 }
 
 // Upon pressing the 'q', 'w', 'e' or 'r' the button will be highlighted and the Stroke will be added to the Recording track
 // Corresponds to buttons shown on the bottom of the canvas
 document.addEventListener("keydown", event => {
-	const keyName = event.key;
-	const buttonName = keyToButton(keyName);
-	const stroke = new Stroke(buttonName);
-	if (buttonName != null) {
-		document.getElementById(buttonName).style.visibility = "visible";
-		addStroke(strokeRecording, stroke);
-	}
+	if(!document.getElementById("inputChoice").checked) {
+        const keyName = event.key;
+        const buttonName = keyToButton(keyName);
+        const stroke = new Stroke(buttonName);
+        if (buttonName != null) {
+            console.log("In event handler");
+            document.getElementById(buttonName).style.visibility = "visible";
+            addStroke(strokeRecording, stroke);
+        }
+    }
 }, false);
 
 // Upon releasing the 'q', 'w', 'e' or 'r' the highlighted button will become invisible again
 document.addEventListener("keyup", event => {
-	const keyName = event.key;
-	const buttonName = keyToButton(keyName);
-	if (buttonName != null) {
-		document.getElementById(buttonName).style.visibility = "hidden";
-	}
+    if(!document.getElementById("inputChoice").checked) {
+        const keyName = event.key;
+        const buttonName = keyToButton(keyName);
+        if (buttonName != null) {
+            document.getElementById(buttonName).style.visibility = "hidden";
+        }
+    }
 }, false);
 
 // Key to button mapping
@@ -159,7 +172,7 @@ function keyToButton(keyName) {
 		default:
 			break;
 	}
-	if(button = null){
+	if(button === null){
 		console.log("Tried to make button, but incorrect key was hit");
 	}
 	return button;
@@ -168,7 +181,6 @@ function keyToButton(keyName) {
 // Converts the Rpi socket input to button presses
 function socketIOinput(socket) {
     socket.on('server-message', function(message) {
-		console.log(message);
         var notes = message;
         recordIOStroke(notes[0], "redButton");
         recordIOStroke(notes[1], "yellowButton");
