@@ -168,7 +168,7 @@ function saveRecording() {
 
 // The handlers for the mp3 file operations, written in jquery using the howler.js library
 $(function() {
-	var howlerExample = new Howl({src: ["ParserAndResult/Alone.mp3"], volume: 0.5});
+	var howlerExample = new Howl({src: ["../ParserAndResult/Alone.mp3"], volume: 0.5});
 	$("#howler-play").on("click", function() {
 		howlerExample.play();
 	});
