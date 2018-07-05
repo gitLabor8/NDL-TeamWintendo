@@ -104,9 +104,22 @@ function scoreCheck(button, time) {
 // Controller, follows the order of the associated HTML elements
 // //////
 
-// Corresponds to buttons shown on the bottom of the canvas
+// Chooses between socket IO input and keyboard input
+function inputChooser(){
+    var socket = io();
+    // The user wants to use the IO input
+	if(document.getElementById("inputChoice").checked){
+		console.log("choose socket io");
+		socketIOinput(socket);
+        //$('*').off('keyup keydown');
+    } else {
+		console.log("choose keyboard");
+		socket.disable("server-message");
+	}
+}
 
 // Upon pressing the 'q', 'w', 'e' or 'r' the button will be highlighted and the Stroke will be added to the Recording track
+// Corresponds to buttons shown on the bottom of the canvas
 document.addEventListener("keydown", event => {
 	const keyName = event.key;
 	const buttonName = keyToButton(keyName);
@@ -153,8 +166,7 @@ function keyToButton(keyName) {
 }
 
 // Converts the Rpi socket input to button presses
-function socketIOinput() {
-    var socket = io();
+function socketIOinput(socket) {
     socket.on('server-message', function(message) {
 		console.log(message);
         var notes = message;

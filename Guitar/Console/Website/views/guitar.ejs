@@ -12,7 +12,6 @@
 
   <!-- Handle the socket IO for the guitar input !-->
   <script src="/socket.io/socket.io.js"></script>
-  <script> socketIOinput() </script>
 </head>
 
 <body onLoad="generateDropdownMenu()">
@@ -70,4 +69,16 @@
     <li>
       <div id="score"></div>
     </li>
-    </ul></body>
+    <div>
+      Keyboard
+      <label class="switch">
+        <input id="inputChoice" type="checkbox" onclick="inputChooser()" checked>
+        <span class="slider round"></span>
+      </label>
+      IO
+    </div>
+    </ul>
+  // Choose input for the first time
+  <script> inputChooser() </script>
+
+</body>
