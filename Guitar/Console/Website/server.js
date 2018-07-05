@@ -10,7 +10,7 @@ app.get('/', function(req, res) {
 
 app.use(express.static(path.join(__dirname, 'views')));
 
-var tuple = ""
+var tuple = "";
 //var app = require('express')();
 //var server = require('http').createServer(app);
 var io = require('socket.io')(http);
@@ -19,12 +19,11 @@ var io = require('socket.io')(http);
 //Upon receiving a message from Simulation.py
 io.on('connection', function(socket) {
 	console.log('a user connected');
-	io.emit('server-message', 'hello, server');
 
 	socket.on('python-message', function(fromPython) {
-		console.log("fromPython" + fromPython)
+		console.log("fromPython" + fromPython);
 		io.emit('server-message', fromPython);
-	})
+	});
 
 	socket.on('message', function(message) {
 		console.log(message);

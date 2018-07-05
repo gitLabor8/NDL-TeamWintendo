@@ -2,43 +2,21 @@
 <html>
 
 <head>
+  <title>Guitar - by Team Mintendo</title>
   <meta charset="utf-8" />
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <!-- Loading in guitar.css, guitar.js and the jquery library !-->
   <link rel="stylesheet" type="text/css" href="guitar.css">
-  <script src="howler.js"></script>
-  <script src="guitar.js"></script>
+  <script type="text/javascript" src="howler.js"></script>
+  <script type="text/javascript" src="guitar.js"></script>
 
   <!-- Handle the socket IO for the guitar input !-->
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    $(function () {
-      var socket = io();
-      socket.on('server-message', function(message) {
-        //console.log(message);
-        var notes = message;
-        console.log(notes);
-        socket.emit('message', 'hello socket.io from browser');
-        button1 = notes[0];
-        console.log(button1);
-        button2 = notes[1];
-        console.log(button2);
-        button3 = notes[2];
-        button4 = notes[3];
-        if(button1 == "1"){
-          console.log(button1);
-          //addStroke("redButton");
-          document.getElementById("redButton").style.visibility = 'visible';
-        }
-        if(button1 == "0"){
-          document.getElementById("redButton").style.visibility = 'hidden';
-        }
-      });
-    });
-  </script>
+  <script> socketIOinput() </script>
 </head>
 
 <body onLoad="generateDropdownMenu()">
+  <!-- The canvas displays the current and upcoming buttonspresses !-->
   <div id="canvas" class="canvas">
     <!-- The playfield shows the strokes of the Track that are being played in the next 3 seconds !-->
     <div id="playField" class="playfield">

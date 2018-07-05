@@ -149,6 +149,32 @@ function keyToButton(keyName) {
 	return button;
 }
 
+// Converts the Rpi socket input to button presses
+function socketIOinput() {
+    var socket = io();
+    socket.on('server-message', function(message) {
+		console.log(message);
+        var notes = message;
+        recordIOStroke(notes[0], "redButton");
+        recordIOStroke(notes[1], "yellowButton");
+        recordIOStroke(notes[2], "greenButton");
+        recordIOStroke(notes[3], "blueButton");
+    });
+}
+
+// Given a note and a corresponding button name, records the note as a stroke
+function recordIOStroke(note, buttonName){
+	if(note == "1"){				// The note is hit
+        document.getElementById(buttonName).style.visibility = "visible";
+        const stroke = new Stroke(buttonName);
+        addStroke(strokeRecording, stroke);
+    } else if(note == "0"){			// The note isn't hit
+        document.getElementById(buttonName).style.visibility = 'hidden';
+    } else {
+		console.log("unexpected IO input: " + note);
+	}
+}
+
 // Correspond to the buttons in the horizontal menu
 
 // Deletes the current recording
