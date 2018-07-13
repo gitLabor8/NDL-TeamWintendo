@@ -7,25 +7,35 @@ import numpy as np
 import argparse
 import imutils
 import cv2
-
 from socketIO_client import SocketIO, LoggingNamespace
- 
-#Opens the camera module and sets the resolution on the Rpi so it can be used to take pictures.
+
+# a lot of this code was inspired on the code of Adrian
+# Rosebrock from https://www.pyimagesearch.com/2016/10/31/detecting-multiple-bright-spots-in-an-image-with-python-and-opencv/
+
+
+# opens the camera module and sets the resolution on the Rpi
+# so it can be used to take pictures
 camera = picamera.PiCamera()
 camera.resolution = (1280, 720)
 
-#Opens the serial port where the Arduino is hooked up to, so it can be read.
+# opens the serial port where the Arduino is hooked up to,
+# so it can be read
 ser = serial.Serial("/dev/ttyUSB0", 9600)
 
+# creates global lists for the areas that need to be scanned
+# on the pictures and the results that need to be put out
 buttonAreas = []
 buttonResults = []
 
-#Continues while loop to check if we get input form the Arduino and if a picture must then be taken.
+# continues while loop to check if we get input form the
+# arduino and if a picture must then be taken
 while True:
-    #Checks if the arduino sends the signal to take a picture, if so takes a picture and saves it.
+    #Checks if the arduino sends the signal to take a picture,
+    #if so takes a picture and saves it
     if(int (ser.readline().rstrip()) == 1):
         break
 
+# takes picture
 camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
 
 # load the image, convert it to grayscale, and blur it
@@ -72,19 +82,24 @@ cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
 cnts = cnts[0] if imutils.is_cv2() else cnts[1]
 cnts = contours.sort_contours(cnts)[0]
 
-# loop over the contours
+# loop over the contours and creates the areas that will be
+# looked at from now on
 for (i,c) in enumerate(cnts):
     # draw the bright spot on the image
     x,y,w,h = cv2.boundingRect(c)
     buttonAreas.append([x, w, y, h])
     cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
     
-    
+# makes the buttonResults list the length of the amount
+# of brightspots found
 for i in range(0, len(buttonAreas)):
     buttonResults.append(0)
 
+# new while loop that continues for ever to execute the program
 while True:
     if(int (ser.readline().rstrip()) == 1):
+    
+        # takes picture   
         camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
 	
         # load the image, convert it to grayscale, and blur it
@@ -99,14 +114,17 @@ while True:
         # any small blobs of noise from the thresholded image
         thresh = cv2.erode(thresh, None, iterations=2)
         thresh = cv2.dilate(thresh, None, iterations=4)    
-        
-        height, width = img.shape
 
+	# a for loop that loops over all the areas that need to be
+	# scanned for their amount of white-/blackness
         for (i,c) in enumerate(buttonAreas):
             whitepixel = 0
             blackpixel = 0
             i_x = buttonAreas[i][0]
             i_y = buttonAreas[i][2]
+
+	    # double for loop that checks for every pixel in the
+	    # area if it is white of black
             for x in range(i_x, i_x + int(buttonAreas[i][1])-1):
                 for y in range(i_y, i_y + int(buttonAreas[i][3])-1):
                     imVal = thresh[y, x]
@@ -114,17 +132,24 @@ while True:
                         whitepixel += 1
                     else:
                         blackpixel += 1
+
+	    # if else statement that checks whether the area was
+	    # black enough to be counted as if the button was pressed
             if whitepixel*3 < blackpixel:
                 buttonResults[i] = 1
             else:
                 buttonResults[i] = 0
         
+    	# Sends the message to the web application
         with SocketIO('localhost', 3000, LoggingNamespace) as socketIO:
             socketIO.emit('python-message', buttonResults)
-                
+
+
+    	# resets the results of the buttons                
         for i in range(0, len(buttonAreas)):
             buttonResults[i] = 0
-                
+
+# closes the camera (needed for the program to work)
 camera.close()
 
 
