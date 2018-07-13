@@ -7,6 +7,8 @@ import numpy as np
 import argparse
 import imutils
 import cv2
+
+from socketIO_client import SocketIO, LoggingNamespace
  
 #Opens the camera module and sets the resolution on the Rpi so it can be used to take pictures.
 camera = picamera.PiCamera()
@@ -32,7 +34,7 @@ blurred = cv2.GaussianBlur(img, (11, 11), 0)
 
 # threshold the image to reveal light regions in the
 # blurred image
-thresh = cv2.threshold(blurred, 180, 255, cv2.THRESH_BINARY)[1]
+thresh = cv2.threshold(blurred, 240, 255, cv2.THRESH_BINARY)[1]
 
 # perform a series of erosions and dilations to remove
 # any small blobs of noise from the thresholded image
@@ -62,6 +64,7 @@ for label in np.unique(labels):
     if numPixels > 300:
         mask = cv2.add(mask, labelMask)
 
+
 # find the contours in the mask, then sort them from left to
 # right
 cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
@@ -74,8 +77,11 @@ for (i,c) in enumerate(cnts):
     # draw the bright spot on the image
     x,y,w,h = cv2.boundingRect(c)
     buttonAreas.append([x, w, y, h])
-
-print "ready"
+    cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
+    
+    
+for i in range(0, len(buttonAreas)):
+    buttonResults.append(0)
 
 while True:
     if(int (ser.readline().rstrip()) == 1):
@@ -87,26 +93,37 @@ while True:
 
         # threshold the image to reveal light regions in the
         # blurred image
-        thresh = cv2.threshold(blurred, 200, 255, cv2.THRESH_BINARY)[1]
+        thresh = cv2.threshold(blurred, 240, 255, cv2.THRESH_BINARY)[1]
+        
+        # perform a series of erosions and dilations to remove
+        # any small blobs of noise from the thresholded image
+        thresh = cv2.erode(thresh, None, iterations=2)
+        thresh = cv2.dilate(thresh, None, iterations=4)    
+        
         height, width = img.shape
 
         for (i,c) in enumerate(buttonAreas):
             whitepixel = 0
             blackpixel = 0
-            for x in range(int(buttonAreas[i][0]), int(buttonAreas[i][1]) + 1):
-                for y in range(int(buttonAreas[i][2]), int(buttonAreas[i][3]) + 1):
-                    imVal = thresh[x, y]
+            i_x = buttonAreas[i][0]
+            i_y = buttonAreas[i][2]
+            for x in range(i_x, i_x + int(buttonAreas[i][1])-1):
+                for y in range(i_y, i_y + int(buttonAreas[i][3])-1):
+                    imVal = thresh[y, x]
                     if imVal == 255:
                         whitepixel += 1
                     else:
                         blackpixel += 1
-            if whitepixel > (2*blackpixel):
-                buttonResults.append(0)
+            if whitepixel*3 < blackpixel:
+                buttonResults[i] = 1
             else:
-                buttonResults.append(1)
+                buttonResults[i] = 0
+        
+        with SocketIO('localhost', 3000, LoggingNamespace) as socketIO:
+            socketIO.emit('python-message', buttonResults)
                 
-        print buttonResults
-        buttonResults = []
+        for i in range(0, len(buttonAreas)):
+            buttonResults[i] = 0
                 
 camera.close()
 
