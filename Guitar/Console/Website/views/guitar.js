@@ -192,8 +192,7 @@ function recordIOStroke(note, buttonName){
     } else if(note == "0"){			// The note isn't hit
         document.getElementById(buttonName).style.visibility = 'hidden';
     } else {
-		// TODO: fix this issue
-//		console.log("unexpected IO input: " + note);
+		console.log("unexpected IO input: " + note);
 	}
 }
 
