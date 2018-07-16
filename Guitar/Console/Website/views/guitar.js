@@ -192,7 +192,8 @@ function recordIOStroke(note, buttonName){
     } else if(note == "0"){			// The note isn't hit
         document.getElementById(buttonName).style.visibility = 'hidden';
     } else {
-		console.log("unexpected IO input: " + note);
+		// TODO: fix this issue
+//		console.log("unexpected IO input: " + note);
 	}
 }
 
@@ -304,18 +305,21 @@ function printTrack(track) {
 
 // Shows ordered list of strokes that will come in the next 3 seconds
 function showFutureStrokes(track) {
-	console.log("showFutureStrokes: " + printTrack(track) + timeSinceStart());
+	console.log("showFutureStrokes: " + printTrack(track));
 	if (track) {
-		for (var i = 0; i < track.strokeList.length; i++) {
-			var delayTime = track.strokeList[i].time;
-			//console.log("delayTime " + delayTime + " colour: " + track.strokeList[i].button);
-			setTimeout(function() {
-				console.log("sending " + track.strokeList[i].button);
-                showStroke(track.strokeList[i]).bind(track)
-            }, delayTime);
-		}
-		console.log("Finished rendering " + track.name);
-	}
+		timeOutSet(track, 0, 0);
+    }
+}
+
+// Deconstructed for-loop, to prevent all timeout functions to call the nth stroke
+function timeOutSet(track, prevDelay, i){
+    if(i < track.strokeList.length) {
+        var delayTime = track.strokeList[i].time - prevDelay;
+        setTimeout(function () {
+            showStroke(track.strokeList[i]);
+            timeOutSet(track, track.strokeList[i].time, ++i);
+        }, delayTime);
+    }
 }
 
 // Shows one stroke
@@ -323,7 +327,6 @@ function showStroke(stroke) {
 	var strokeDiv = document.createElement("div");
 	var colour = buttonToColour(stroke.button);
 	strokeDiv.classList.add(colour);
-	console.log("colour" + stroke.button);
 	strokeDiv.classList.add("strokeToCome");
 	var strip = document.getElementById(colour + "Strip");
 	strip.appendChild(strokeDiv);
@@ -377,7 +380,7 @@ function generateDropdownMenu() {
 				setTimeout(function() {
 					currentTrack = track;
 					resetTime();
-					showFutureStrokes(track);
+					showFutureStrokes(currentTrack);
 				}, visualDelay);
 			});
 			var text = document.createTextNode(track.name);
