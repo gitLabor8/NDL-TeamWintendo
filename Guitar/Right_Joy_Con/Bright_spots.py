@@ -27,6 +27,7 @@ ser = serial.Serial("/dev/ttyUSB0", 9600)
 buttonAreas = []
 buttonResults = []
 
+print 'Ready'
 # continues while loop to check if we get input form the
 # arduino and if a picture must then be taken
 while True:
@@ -95,25 +96,21 @@ for (i,c) in enumerate(cnts):
 for i in range(0, len(buttonAreas)):
     buttonResults.append(0)
 
+print 'Initialisation complete'
 # new while loop that continues for ever to execute the program
 while True:
     if(int (ser.readline().rstrip()) == 1):
     
         # takes picture   
         camera.capture("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg")
-	
+
         # load the image, convert it to grayscale, and blur it
         image = cv2.imread("/home/pi/Desktop/NDL-TeamWintendo/Guitar/Console/The_Image.jpg",0)
         blurred = cv2.GaussianBlur(image, (11, 11), 0)
 
         # threshold the image to reveal light regions in the
         # blurred image
-        thresh = cv2.threshold(blurred, 240, 255, cv2.THRESH_BINARY)[1]
-        
-        # perform a series of erosions and dilations to remove
-        # any small blobs of noise from the thresholded image
-        thresh = cv2.erode(thresh, None, iterations=2)
-        thresh = cv2.dilate(thresh, None, iterations=4)    
+        thresh = cv2.threshold(blurred, 240, 255, cv2.THRESH_BINARY)[1]   
 
 	# a for loop that loops over all the areas that need to be
 	# scanned for their amount of white-/blackness
@@ -123,22 +120,22 @@ while True:
             i_x = buttonAreas[i][0]
             i_y = buttonAreas[i][2]
 
-	    # double for loop that checks for every pixel in the
+	    # double for loop that checks for every 30th pixel in the
 	    # area if it is white of black
-            for x in range(i_x, i_x + int(buttonAreas[i][1])-1):
-                for y in range(i_y, i_y + int(buttonAreas[i][3])-1):
+            for x in range(i_x, i_x + int(buttonAreas[i][1])-1, 30):
+                for y in range(i_y, i_y + int(buttonAreas[i][3])-1, 30):
                     imVal = thresh[y, x]
                     if imVal == 255:
                         whitepixel += 1
                     else:
                         blackpixel += 1
-
+                        
 	    # if else statement that checks whether the area was
 	    # black enough to be counted as if the button was pressed
             if whitepixel*3 < blackpixel:
-                buttonResults[i] = 1
+                buttonResults[len(buttonAreas)-1-i] = 1
             else:
-                buttonResults[i] = 0
+                buttonResults[len(buttonAreas)-1-i] = 0
         
     	# Sends the message to the web application
         with SocketIO('localhost', 3000, LoggingNamespace) as socketIO:
