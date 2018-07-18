@@ -1,5 +1,7 @@
+De mappenstructuur is gelijk aan de Switch onderdelen die ze nabootsen.
+
 We gebruiken:
 - Raspberry pi 1:
-	Installatiehandleiding in het mapje Raspberry Pi.
+	Installatiehandleiding in het mapje Console, al wordt de Raspberry pi ook gebruikt in de Right_Joy_Con.
 - Arduino Uno in release 3, R3:
-	Installatiehandleiding in het mapje Arduino.
+	Installatiehandleiding in het mapje Left_Joy_Con.

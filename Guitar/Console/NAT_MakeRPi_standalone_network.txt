@@ -1,28 +1,6 @@
-Standalone network.txt
-J
-
-Type
-Tekst
-Grootte
-308 bytes
-Gebruikte opslagruimte
-0 bytesEigendom van iemand anders
-Locatie
-NAT
-Eigenaar
-Justin Reniers
-Gewijzigd op
-08:01 door Justin Reniers
-Gemaakt op
-08:01
-Voeg een beschrijving toe
-Kijkers kunnen downloaden
-dnsmasq	version:	2.78
-hostapd version:	2.6
-
 Make sure the Raspbian version is up to date:
 	sudo apt-get update
 	sudo apt-get upgrade
 	
-Follow the well explained and laid out documentation on the raspberry pi website:
+Follow the well explained and laid out documentation on the Raspberry pi website:
 	https://www.raspberrypi.org/documentation/configuration/wireless/access-point.md

@@ -3,3 +3,9 @@
 - Open de image writing tool en write de 2018-03-13-raspbian-stretch.img image naar een SD card
 - Plug the SD card in de Raspbarry pi
 - De NDL-TeamWintendo.zip moet uitgepakt worden op de desktop van de Raspberry Pi.
+
+Raspberry pi info:
+ SSH/VNC: 192.168.1.3 via ASUS-wifi
+ Python: v3.5.3
+ user: pi
+ pw: raspberry (as default as possible)

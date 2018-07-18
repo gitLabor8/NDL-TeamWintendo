@@ -1,26 +1,3 @@
-Node js & packages.txt
-J
-
-Type
-Tekst
-Grootte
-894 bytes
-Gebruikte opslagruimte
-0 bytesEigendom van iemand anders
-Eigenaar
-Justin Reniers
-Gewijzigd op
-08:00 door Justin Reniers
-Geopend op
-10:58 door mij
-Gemaakt op
-08:00
-Voeg een beschrijving toe
-Kijkers kunnen downloaden
-Node.js version:	8.11.1
-Express version:	
-EJS		version:	
-
 Make sure the raspberry pi is up to date:
 	sudo apt-get update
 	sudo apt-get upgrade
@@ -35,8 +12,7 @@ You can check that the installation was successful and the version of Node.js wi
 	node -v
 	
 	
-Since Express and EJS are both packages for Node.js and are included in the package
-manager provided by Node.js, we can install them as follows:
+Since Express and EJS are both packages for Node.js and are included in the package manager provided by Node.js, we can install them as follows:
 	npm install express
 	npm install ejs
 	
@@ -46,5 +22,5 @@ If you want to create your web app now, you can use the following commands to cr
 	npm install
 	
 And once you want to run your app:
-	node app_name
+	node Guitar/Console/Website/views/guitar.ejs
 	
